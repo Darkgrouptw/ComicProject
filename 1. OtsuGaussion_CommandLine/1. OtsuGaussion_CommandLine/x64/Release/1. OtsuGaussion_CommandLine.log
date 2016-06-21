@@ -1,0 +1,10 @@
+﻿已經開始建置於 2016/6/13 上午 10:32:03。
+     1>節點 2 (Build 目標) 上的專案 "D:\ComicProject\1. OtsuGaussion_CommandLine\1. OtsuGaussion_CommandLine\1. OtsuGaussion_CommandLine.vcxproj"。
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"D:\ComicProject\1. OtsuGaussion_CommandLine\x64\Release\\1. OtsuGaussion_CommandLine.exe" /NOLOGO /LIBPATH:C:\Qt\Qt5.6.0\5.6\msvc2013_64\lib /LIBPATH:D:\VGLibrary\PointMatchLib\Release /LIBPATH:D:\VGLibrary\opencv246\build\x86\vc10\lib /LIBPATH:"D:\VGLibrary\CGAL-4.3\bin\lib" /LIBPATH:"D:\VGLibrary\CGAL-4.3\auxiliary\gmp\lib\\" /LIBPATH:"D:\VGLibrary\CGAL-4.3\bin\lib\Release" /LIBPATH:D:\VGLibrary\boost_1_53_0\bin /LIBPATH:D:\VGLibrary\BBW_LIBIGL\Release /LIBPATH:D:\VGLibrary\BBW_LIBIGL\tetgen1.5.0\bin\Release /LIBPATH:"C:\Program Files (x86)\Mosek\7\tools\platform\win32x86\bin" /LIBPATH:D:\VGLibrary\Potrace\Release /LIBPATH:D:\VGDibrary\freeglut\Lib /LIBPATH:"D:\Program Files (x86)\Tesseract-OCR\lib" /LIBPATH:"D:\VGLibrary\tesseract-3.02.02-win32-lib-include-dirs\lib" qtmain.lib Qt5Core.lib Qt5Gui.lib Potrace.lib PointMatchLib.lib opencv_core246.lib opencv_highgui246.lib opencv_imgproc246.lib "libmpfr-4.lib" "libgmp-10.lib" BBW_LIBIGL.lib tet.lib mosek7_0.lib mosekscopt7_0.lib libtesseract302.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:"D:\ComicProject\1. OtsuGaussion_CommandLine\x64\Release\1. OtsuGaussion_CommandLine.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\ComicProject\1. OtsuGaussion_CommandLine\x64\Release\1. OtsuGaussion_CommandLine.lib" /MACHINE:X64 x64\Release\main.obj
+     1>LINK : fatal error LNK1104: 無法開啟檔案 'CGAL-vc110-mt-4.3.lib'
+     1>專案 "D:\ComicProject\1. OtsuGaussion_CommandLine\1. OtsuGaussion_CommandLine\1. OtsuGaussion_CommandLine.vcxproj" (Build 目標) 建置完成 -- 失敗。
+
+建置失敗。
+
+經過時間 00:00:00.07
