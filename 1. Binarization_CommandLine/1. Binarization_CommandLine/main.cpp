@@ -10,6 +10,7 @@ struct DoInfo{
 	int *Ostu_params = NULL;											// Ostu 參數 (<數字> <數字>)
 	int *Gaussain_params =  NULL;										// Gaussain 參數 (<數字> <數字> <數字>)
 	int method = -1;													// 使用的方法
+	QString outDir;														// 輸出時前面會多加這個名稱
 };
 vector<DoInfo *>	DoList;												// 要做的圖片 list
 bool				UseMethod = false;									// 必須要是 true
@@ -34,7 +35,7 @@ void Slash(QString str)
 	{
 		cout << "===== 參數設定 =====" << endl;
 		cout << "必要的參數(擺在前面)：" << endl;
-		cout << "-i <圖片>			A圖片" << endl;
+		cout << "-i <圖片>			讀圖片" << endl;
 		cout << "-t <目錄>			對整個目錄做二值化" << endl;
 		cout << endl;
 		cout << "參考參數(擺在後面)：" << endl;
@@ -44,11 +45,11 @@ void Slash(QString str)
 		cout << "-d				顯示 Debug 資訊" << endl;
 		cout << endl;
 		cout << "範例：" << endl;
-		cout << endl;
-		cout << "假設只執行單張圖片，可以打" << endl;
+		cout << "	假設只執行單張圖片，可以打" << endl;
 		cout << "<exe檔> -i 1.png -m 2" << endl;
-		cout << "假設要執行檔個目錄裡面的圖檔，可以打" << endl;
+		cout << "	假設要執行檔個目錄裡面的圖檔，可以打" << endl;
 		cout << "<exe檔> -t \"D:/123/\" -m 2" << endl;
+		UseMethod = true;
 	}
 }
 
@@ -76,8 +77,14 @@ void ParamsSet(int &i, char **argv)
 	{
 		QDir dir(argv[++i]);
 		QStringList temp1 = dir.entryList();
-		for (int j = 0; j < temp1.size(); j++)
-			cout << temp1[j].toStdString() << endl;
+		// 去掉前面兩個 . 跟 ..
+		for (int j = 2; j < temp1.size(); j++)
+		{
+			DoInfo *tempDoList = new DoInfo;
+			tempDoList->fileName = dir.absolutePath() + "/" + temp1[j];
+			cout << tempDoList->fileName.toStdString() << endl;
+		}
+		//cout << temp1[j].toStdString() << endl;
 		cout << endl;
 	}
 	else if (params == "-m")
@@ -87,7 +94,6 @@ void ParamsSet(int &i, char **argv)
 			for (int i = 0; i < DoList.size(); i++)
 				DoList[i]->method = tempStr.toInt();
 	}
-
 }
 
 
@@ -104,7 +110,7 @@ int main(int argc, char *argv[])
 	// 確定有沒有可以用的方法
 	if (!UseMethod)
 	{
-		cout << "沒有可以用的方法，所以無法執行!!" << endl;
+		cout << "沒有指定方法，所以無法執行!!" << endl;
 		return -1;
 	}
 
