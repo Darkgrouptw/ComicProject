@@ -4,6 +4,7 @@ using namespace std;
 class SystemParams
 {
 public:
+
 	// FilePath
 	static string str_Resources;
 	static string str_Resources_Original;
@@ -24,4 +25,9 @@ public:
 	static int OG_sigma;
 	static int OG_Bsigma;
 	static int OG_Wsigma;
+
+	// Cartoon + Texture Filter
+	static double ct_f_sigma;
+	static double ct_v_lim;
+	static double s_min_size_area;
 };

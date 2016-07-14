@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "../../Common/SystemParams.h"
+#include <QDir>
 
 // OpenCV
 #include <opencv2/core/core.hpp>
@@ -14,7 +15,7 @@ using namespace std;
 class OtsuGaussion_Library
 {
 public:
-	OtsuGaussion_Library(string, int g_sigma = 0, int bs_sigma = 0, int ws_sigma = 0);
+	OtsuGaussion_Library(string, int g_sigma = 0, int bs_sigma = 0, int ws_sigma = 0, bool bool_debug = false, string outDir = "");
 	~OtsuGaussion_Library();
 
 	void ComputeOtsuGaussian();
@@ -24,6 +25,8 @@ public:
 private:
 	string								filename;			// 檔案名稱
 	string								binary_output;		// 二值化要輸出的檔案，通常後面都會跟著 _1200_B => 1200 dpi B => Binary
+	string								outDir;				// 輸出的目錄
+	bool								bool_debug;			// 是否要顯示 debug 資訊
 
 	cv::Mat								local;
 	cv::Mat								inpImg;				// 要操作的圖

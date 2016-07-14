@@ -1,21 +1,37 @@
 #include "otsugaussion_library.h"
 
-OtsuGaussion_Library::OtsuGaussion_Library(string filename, int g_sigma, int b_sigma, int w_sigma)
+OtsuGaussion_Library::OtsuGaussion_Library(string filename, int g_sigma, int b_sigma, int w_sigma, bool Debug, string outDir)
 {
 	this->filename = filename;
 	this->inpImg = cv::imread(filename);
 	this->oriInpImg = inpImg.clone();
 	this->img_ori_width = inpImg.size().width;
 	this->img_ori_height = inpImg.size().height;
+	this->outDir = outDir;
+	this->bool_debug = Debug;
 
-	cout << "Width => " << img_ori_width << " Height => " << img_ori_height << endl;
+	if (bool_debug)
+		cout << "Width => " << img_ori_width << " Height => " << img_ori_height << endl;
 
 	SystemParams::OG_sigma = g_sigma;
 	SystemParams::OG_Bsigma = b_sigma;
 	SystemParams::OG_Wsigma = w_sigma;
-	cv::imwrite(SystemParams::str_Resources_Original + filename, oriInpImg);
-}
 
+	QDir *dir = new QDir(QString((SystemParams::str_Resources_Original + outDir).c_str()));
+	if (!dir->exists())
+		dir->mkdir(".");
+	delete dir;
+	dir = new QDir(QString((SystemParams::str_Resources_Binarization + outDir).c_str()));
+	if (!dir->exists())
+		dir->mkdir(".");
+	delete dir;
+	QString temp = QString::fromStdString(filename);
+	if (temp.contains("/"))
+		filename = temp.split("/").last().toStdString();
+	else if (temp.contains("\\"))
+		filename = temp.split("\\").last().toStdString();
+	cv::imwrite(SystemParams::str_Resources_Original + outDir + filename, oriInpImg);
+}
 OtsuGaussion_Library::~OtsuGaussion_Library()
 {
 
@@ -23,14 +39,16 @@ OtsuGaussion_Library::~OtsuGaussion_Library()
 
 void OtsuGaussion_Library::ComputeOtsuGaussian()
 {
-	cout << "秈Otsu_Gaussian" << endl;
+	if (bool_debug)
+		cout << "秈Otsu_Gaussian" << endl;
 
 	//锣η顶	
 	//cv::Mat gray_image = this->oriInpImg.clone();
 	cv::Mat gray_image;
 	cv::cvtColor(oriInpImg, gray_image, CV_BGR2GRAY);
 
-	cout << "秈cvtColor" << endl;
+	if (bool_debug)
+		cout << "秈cvtColor" << endl;
 
 	//参璸よ瓜
 	int hist[256] = { 0 };
@@ -55,7 +73,8 @@ void OtsuGaussion_Library::ComputeOtsuGaussian()
 		cv::imwrite(binary_output, gray_image);
 		return;
 	}
-	cout << "霩" << t << endl;
+	if (bool_debug)
+		cout << "霩" << t << endl;
 
 	//*----------------------------计参璸---------------------------------*
 	int not_zero = 0;
@@ -67,7 +86,8 @@ void OtsuGaussion_Library::ComputeOtsuGaussian()
 			break;
 		}
 	}
-	cout << "秨繷" << not_zero << endl;
+	if (bool_debug)
+		cout << "秨繷" << not_zero << endl;
 
 	int all_size = 0;
 	double all_temp = 0;
@@ -86,7 +106,8 @@ void OtsuGaussion_Library::ComputeOtsuGaussian()
 	double all_temp2 = all_temp1 / all_size;
 	double all_std = sqrt((double)all_temp2);
 
-	cout << "all_mean" << all_mean << " all_std" << all_std << endl;
+	if (bool_debug)
+		cout << "all_mean" << all_mean << " all_std" << all_std << endl;
 
 
 	int white_max = 0;
@@ -113,8 +134,11 @@ void OtsuGaussion_Library::ComputeOtsuGaussian()
 	double w_temp = w_sum0 / sum0;
 
 	double white_std = sqrt((double)w_temp);
-	cout << "white_max" << white_max << " 计秖" << temp0 << endl;
-	cout << "white_sum" << white_sum << " 计秖" << sum0 << " mean:" << white_mean << " std:" << white_std << endl;
+	if (bool_debug)
+	{
+		cout << "white_max" << white_max << " 计秖" << temp0 << endl;
+		cout << "white_sum" << white_sum << " 计秖" << sum0 << " mean:" << white_mean << " std:" << white_std << endl;
+	}
 
 	//衡White max 玡mean 蛤 std
 	int w_m_size = 0;
@@ -125,7 +149,9 @@ void OtsuGaussion_Library::ComputeOtsuGaussian()
 		w_m_sum += i * hist[i];
 	}
 	int w_m_mean = w_m_sum / w_m_size;
-	cout << "white_maxぇ玡キА" << w_m_mean << endl;
+
+	if (bool_debug)
+		cout << "white_maxぇ玡キА" << w_m_mean << endl;
 	int w_m_sum0 = 0;
 	for (int i = 0; i<white_max + 1; i++)
 	{
@@ -134,7 +160,9 @@ void OtsuGaussion_Library::ComputeOtsuGaussian()
 	}
 	int w_m_temp0 = w_m_sum0 / w_m_size;
 	double w_m_std = sqrt((double)w_m_temp0);
-	cout << "white_maxぇ玡夹非畉" << w_m_std << endl;
+
+	if (bool_debug)
+		cout << "white_maxぇ玡夹非畉" << w_m_std << endl;
 
 	int black_max = 0;
 	int temp1 = hist[t];
@@ -159,8 +187,12 @@ void OtsuGaussion_Library::ComputeOtsuGaussian()
 	}
 	double b_temp = b_sum0 / sum1;
 	double black_std = sqrt((double)b_temp);
-	cout << "black_max" << black_max << " 计秖" << temp1 <<endl;
-	cout << "black_sum" << black_sum << " 计秖" << sum1 << " mean:" << black_mean << " std:" << black_std << endl;
+
+	if (bool_debug)
+	{
+		cout << "black_max" << black_max << " 计秖" << temp1 << endl;
+		cout << "black_sum" << black_sum << " 计秖" << sum1 << " mean:" << black_mean << " std:" << black_std << endl;
+	}
 
 	//衡black max 玡mean 蛤 std
 	int b_m_size = 0;
@@ -171,7 +203,10 @@ void OtsuGaussion_Library::ComputeOtsuGaussian()
 		b_m_sum += i * hist[i];
 	}
 	int b_m_mean = b_m_sum / b_m_size;
-	cout << "black_maxぇキА" << b_m_mean << endl;
+
+	if (bool_debug)
+		cout << "black_maxぇキА" << b_m_mean << endl;
+
 	int b_m_sum0 = 0;
 	for (int i = black_max; i<256; i++)
 	{
@@ -180,7 +215,9 @@ void OtsuGaussion_Library::ComputeOtsuGaussian()
 	}
 	int b_m_temp0 = b_m_sum0 / b_m_size;
 	double b_m_std = sqrt((double)b_m_temp0);
-	cout << "black_maxぇ夹非畉" << b_m_std << endl;
+
+	if (bool_debug)
+		cout << "black_maxぇ夹非畉" << b_m_std << endl;
 
 
 	//疭て
@@ -213,11 +250,17 @@ void OtsuGaussion_Library::ComputeOtsuGaussian()
 	// р办local倒
 	cv::adaptiveThreshold(gray_image, local, 255, CV_ADAPTIVE_THRESH_GAUSSIAN_C, CV_THRESH_BINARY, SystemParams::G_block_size, SystemParams::G_params);
 
-	cout << "done" << endl;
+	if (bool_debug)
+		cout << "done" << endl;
 	//糶て瓜
 	string ori_fileName = filename.substr(filename.find_last_of("/") + 1);
 	string fileName = MakeFileNameWithFlag(ori_fileName, 1200, "_B");
-	binary_output = SystemParams::str_Resources_Binarization + "/" + fileName;
+
+
+	binary_output = SystemParams::str_Resources_Binarization + outDir + fileName;
+
+	if (bool_debug)
+		cout << "块郎" << binary_output << endl;
 	cv::imwrite(binary_output, local);
 }
 int OtsuGaussion_Library::Threshold(int *hist) 
@@ -259,8 +302,7 @@ int OtsuGaussion_Library::Threshold(int *hist)
 	}
 	return maxT;
 }
-
-cv::string OtsuGaussion_Library::MakeFileNameWithFlag(string fileName, int dpi, string flag)
+string OtsuGaussion_Library::MakeFileNameWithFlag(string fileName, int dpi, string flag)
 {
 	stringstream temp_dpi;
 	temp_dpi << dpi;
