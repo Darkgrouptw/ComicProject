@@ -45,7 +45,7 @@ void ParamsSet(int &i, char **argv)
 		cout << "把σ把计(耚)" << endl;
 		cout << "-m < 0 or 1 or 2>		0 ㄏノ Otsu1 ㄏノ Gaussian 2 琌ㄢよ猭常ㄏノ" << endl;
 		cout << "-op <计> <计>		Otsu 把计" << endl;
-		cout << "-gp <计> <计> <计>	Gaussian 把计砞﹚" << endl;
+		cout << "-gp <计> <计> <计>	Gaussian 把计砞﹚ <キ簿> <black> <white>" << endl;
 		cout << "-d				陪ボ Debug 戈癟" << endl;
 		cout << endl;
 		cout << "絛ㄒ" << endl;

@@ -27,10 +27,10 @@ OtsuGaussion_Library::OtsuGaussion_Library(string filename, int g_sigma, int b_s
 	delete dir;
 	QString temp = QString::fromStdString(filename);
 	if (temp.contains("/"))
-		filename = temp.split("/").last().toStdString();
+		this->filename = temp.split("/").last().toStdString();
 	else if (temp.contains("\\"))
-		filename = temp.split("\\").last().toStdString();
-	cv::imwrite(SystemParams::str_Resources_Original + outDir + filename, oriInpImg);
+		this->filename = temp.split("\\").last().toStdString();
+	cv::imwrite(SystemParams::str_Resources_Original + outDir + this->filename, oriInpImg);
 }
 OtsuGaussion_Library::~OtsuGaussion_Library()
 {
