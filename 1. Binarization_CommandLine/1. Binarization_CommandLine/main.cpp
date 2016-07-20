@@ -7,7 +7,7 @@
 using namespace std;
 struct DoInfo{
 	QString fileName;													// 檔案名稱
-	int method = -1;													// 使用的方法
+	int method;															// 使用的方法
 	QString outDir;														// 輸出時前面會多加這個名稱
 };
 vector<DoInfo *>	DoList;												// 要做的圖片 list
@@ -62,6 +62,7 @@ void ParamsSet(int &i, char **argv)
 		{
 			DoInfo *tempDoList = new DoInfo;
 			tempDoList->fileName = tempStr;
+			tempDoList->method = -1;
 			tempDoList->outDir = "";
 			DoList.push_back(tempDoList);
 		}
@@ -80,6 +81,7 @@ void ParamsSet(int &i, char **argv)
 			{
 				DoInfo *tempDoList = new DoInfo;
 				tempDoList->fileName = dir.absolutePath() + "/" + temp1[j];
+				tempDoList->method = -1;
 				tempDoList->outDir = dir.absolutePath().split("/").last() + "/";
 				DoList.push_back(tempDoList);
 			}
