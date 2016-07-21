@@ -2,6 +2,8 @@
 #include <QFile>
 #include <QDir>
 #include <QStringList>
+#include <QTextStream>
+#include <QIODevice>
 #include "..\OtsuGaussion_Library\otsugaussion_library.h"
 
 using namespace std;
@@ -39,7 +41,7 @@ void ParamsSet(int &i, char **argv)
 	{
 		cout << "===== 參數設定 =====" << endl;
 		cout << "必要的參數(擺在前面)：" << endl;
-		cout << "-i <圖片>			讀圖片" << endl;
+		cout << "-i <圖片>			讀圖片做二值化" << endl;
 		cout << "-t <目錄>			對整個目錄做二值化" << endl;
 		cout << endl;
 		cout << "參考參數(擺在後面)：" << endl;
@@ -67,7 +69,7 @@ void ParamsSet(int &i, char **argv)
 			DoList.push_back(tempDoList);
 		}
 		else
-			cout << tempStr.toStdString() << "	檔案不存在" << endl;
+			cout << tempStr.toStdString() << " 檔案不存在" << endl;
 	}
 	else if (params == "-t")
 	{
@@ -142,5 +144,16 @@ int main(int argc, char *argv[])
 		delete tempImage;
 		cout << "完成 " << (i + 1) << " / " << DoList.size() << endl;
 	}
+
+	// 寫檔案名稱，給接下來的程序做
+	/*QFile file("FileLog.txt");
+	file.open(QIODevice::WriteOnly | QIODevice::Text);
+
+	QTextStream ss(&file);
+	ss << "總共檔案數量: " << DoList.size() << endl;
+	ss << "狀態： 完成二值化!!" << endl;
+	ss << "檔案：" << endl;
+	for (int i = 0; i < DoList.size(); i++)
+		ss << QString::fromStdString(SystemParams::str_Resources_Binarization) <<  DoList[i]->outDir + DoList[i]->fileName << endl;*/
 	return 0;
 }

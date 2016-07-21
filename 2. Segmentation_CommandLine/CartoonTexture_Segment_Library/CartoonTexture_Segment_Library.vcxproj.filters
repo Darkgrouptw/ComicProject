@@ -28,9 +28,27 @@
     <ClCompile Include="cartoontexture_segment_library.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Common\SystemParams.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CartoonTextureFilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LibCartoon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cartoontexture_segment_library.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\SystemParams.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CartoonTextureFilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LibCartoon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

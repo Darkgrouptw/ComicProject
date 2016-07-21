@@ -17,9 +17,9 @@ public:
 	CartoonTexture_Segment_Library(string filename);
 	~CartoonTexture_Segment_Library();
 
-	//void ComputeCTSegmentation();
-	//void RemoveSmallArea1(cv::Mat&);
-	//void RemoveSmallArea2(cv::Mat&);
+	void ComputeCTSegmentation();
+	void RemoveSmallArea1(cv::Mat&);
+	void RemoveSmallArea2(cv::Mat&);
 
 	//string Os
 	string MakeFileNameWithFlag(string, int, string);
@@ -30,6 +30,10 @@ private:
 	cv::Mat				inpImg;				// 要操作的圖
 	int					img_ori_width;		// 原圖寬
 	int					img_ori_height;		// 原圖高
+
+
+	int* labelMap;
+	int* dilatedLabelMap;
 };
 
 #endif // CARTOONTEXTURE_SEGMENT_LIBRARY_H

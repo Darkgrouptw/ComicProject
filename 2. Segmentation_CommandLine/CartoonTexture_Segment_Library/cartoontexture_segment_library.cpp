@@ -1,4 +1,6 @@
 #include "cartoontexture_segment_library.h"
+#include <boost/chrono.hpp>
+#include "CartoonTextureFilter.h"
 
 CartoonTexture_Segment_Library::CartoonTexture_Segment_Library(string filename)
 {
@@ -15,7 +17,7 @@ CartoonTexture_Segment_Library::~CartoonTexture_Segment_Library()
 
 }
 
-/*void CartoonTexture_Segment_Library::RemoveSmallArea1(cv::Mat& segm)
+void CartoonTexture_Segment_Library::RemoveSmallArea1(cv::Mat& segm)
 {
 	if (SystemParams::s_min_size_area == 0)
 		return;
@@ -70,7 +72,7 @@ void CartoonTexture_Segment_Library::RemoveSmallArea2(cv::Mat& segm)
 		}
 
 	contours.clear();
-}*/
+}
 void CartoonTexture_Segment_Library::ComputeCTSegmentation()
 {
 	if (!IsBinary())
@@ -80,15 +82,13 @@ void CartoonTexture_Segment_Library::ComputeCTSegmentation()
 	}
 
 	// 	複製原圖
-	string ori_fileName = filename.substr(filename.find_last_of("/") + 1);
-	cout << ori_fileName << endl;
-	// 拿副檔名的格式，為了把 _1200_B 拿掉
-	string subName = ori_fileName.substr(ori_fileName.find_last_of("."), ori_fileName.length() - ori_fileName.find_last_of("."));
-	ori_fileName = ori_fileName.substr(0, ori_fileName.find_last_of("_B") - 1);
-	ori_fileName = ori_fileName.substr(0, ori_fileName.find_last_of("_"));
-	ori_fileName += subName;
-	int width = inpImg.cols;
-	int height = inpImg.rows;
+	cv::Mat ori_loacl_r = inpImg.clone();
+	string ori_fileName = this->filename.substr(this->filename.find_last_of("/") + 1);
+
+	int ori_width = this->img_ori_width;
+	int ori_height = this->img_ori_height;
+	int width = ori_width;
+	int height = ori_height;
 	float scale = 1.0f;
 	float stage = 0.2f;
 	int dpi = 1200;
@@ -96,16 +96,19 @@ void CartoonTexture_Segment_Library::ComputeCTSegmentation()
 	cv::Mat resizeMat = ori_loacl_r.clone();
 	cv::Mat outSegm;
 	cv::Mat drawing;
-	//Timing calculation
+
 	using namespace boost::chrono;
 	auto start = steady_clock::now();
 	for (int resizeTimes = 0; scale < 4.1f; resizeTimes++, scale += stage, dpi = 12000 / ((int)(scale * 10)), width = ori_width / scale, height = ori_height / scale)
 	{
 		string fileName;
+		// Timing calculation
 		if (resizeTimes != 0)
 		{
 			cv::resize(ori_loacl_r, resizeMat, cv::Size(width, height), 0, 0, cv::INTER_NEAREST);
+
 			fileName = MakeFileNameWithFlag(ori_fileName, dpi, "_B");//Binarization
+
 			if (!cv::imwrite(SystemParams::str_Resources_Binarization + "/" + fileName, resizeMat)){
 				cout << "Write File Failed: " << SystemParams::str_Resources_Binarization << "/" << fileName << endl;
 			}
@@ -136,33 +139,45 @@ void CartoonTexture_Segment_Library::ComputeCTSegmentation()
 				}
 			}
 		}
-		fileName = MakeFileNameWithFlag(ori_fileName, dpi, "_CFC");//Cartoon Filter Color
 
+		fileName = MakeFileNameWithFlag(ori_fileName, dpi, "_CFC");//Cartoon Filter Color
 
 		if (!cv::imwrite(SystemParams::str_Resources_CFC + "/" + fileName, drawing)){
 			cout << "Write File Failed: " << SystemParams::str_Resources_CFC << "/" << fileName << endl;
 		}
-
-
-		if (ShowFrame && resizeTimes == 0)
+		if (resizeTimes == 0)
 		{
+			if (labelMap)
+			{
+				free(labelMap);
+				labelMap = NULL;
+			}
+			labelMap = (int*)malloc(width * height * sizeof(int));
 			// Copy to label map
 			for (int i = 0; i < height; i++)
 			{
 				for (int j = 0; j < width; j++)
 				{
 					if (outSegm.ptr<uchar>(i, j)[0] > 0)
+					{
 						labelMap[i * width + j] = 0;
+					}
 					else
+					{
 						labelMap[i * width + j] = -1;
+					}
 				}
 			}
 			// Dilated Label Map (NEED TO FIX THIS!)
 			cv::Mat elem2 = cv::getStructuringElement(2, cv::Size(10, 10));
 			//for(int a = 0; a < 3; a++)
 			cv::morphologyEx(outSegm, outSegm, cv::MORPH_DILATE, elem2);
-			cv::morphologyEx(outSegm, outSegm, cv::MORPH_DILATE, elem2);
-
+			if (dilatedLabelMap)
+			{
+				free(dilatedLabelMap);
+				dilatedLabelMap = NULL;
+			}
+			dilatedLabelMap = (int*)malloc(width * height * sizeof(int));
 			// Dilated Label Map
 			outSegm.convertTo(outSegm, CV_8UC1);
 			for (int i = 0; i < height; i++)
@@ -170,22 +185,23 @@ void CartoonTexture_Segment_Library::ComputeCTSegmentation()
 				for (int j = 0; j < width; j++)
 				{
 					if (outSegm.ptr<uchar>(i, j)[0] > 0)
+					{
 						dilatedLabelMap[i * width + j] = 0;
+					}
 					else
+					{
 						dilatedLabelMap[i * width + j] = -1;
+					}
 				}
 			}
 		}
-
 		resizeMat.release();
 		outSegm.release();
 		drawing.release();
-
 	}
-	ori_loacl_r.release();
 	auto dur = steady_clock::now() - start;
 	auto msDur = duration_cast<milliseconds>(dur).count();
-	cout << ori_fileName << " Done : " << msDur << " milliseconds\n";
+	cout << "Cartoon+Texture Segmentation time: " << msDur << " milliseconds\n";
 }
 
 bool CartoonTexture_Segment_Library::IsBinary()
