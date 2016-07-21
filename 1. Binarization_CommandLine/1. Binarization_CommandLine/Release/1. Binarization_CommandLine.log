@@ -1,4 +1,4 @@
-﻿已經開始建置於 2016/7/21 下午 05:55:16。
+﻿已經開始建置於 2016/7/21 下午 06:05:22。
      1>節點 2 (Rebuild 目標) 上的專案 "D:\ComicProject\1. Binarization_CommandLine\1. Binarization_CommandLine\1. Binarization_CommandLine.vcxproj"。
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I. /IC:\Qt\Qt5.7.0\5.7\msvc2013\include /I.\GeneratedFiles\Release /IC:\Qt\Qt5.7.0\5.7\msvc2013\include\QtCore /IC:\Qt\Qt5.7.0\5.7\msvc2013\include\QtGui /ID:\VGLibrary\opencv246\include /ID:\VGLibrary\opencv246\build\include /ID:\VGLibrary\opencv246\build\include\opencv /ID:\VGLibrary\opencv246\build\include\opencv2 /nologo /W1 /WX- /O2 /Oy- /D UNICODE /D WIN32 /D WIN64 /D QT_DLL /D QT_NO_DEBUG /D NDEBUG /D QT_CORE_LIB /D QT_GUI_LIB /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
@@ -12,4 +12,4 @@
 
 建置成功。
 
-經過時間 00:00:00.84
+經過時間 00:00:00.86
