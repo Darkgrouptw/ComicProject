@@ -30,6 +30,7 @@ OtsuGaussion_Library::OtsuGaussion_Library(string filename, int g_sigma, int b_s
 		this->filename = temp.split("/").last().toStdString();
 	else if (temp.contains("\\"))
 		this->filename = temp.split("\\").last().toStdString();
+
 	cv::imwrite(SystemParams::str_Resources_Original + outDir + this->filename, oriInpImg);
 }
 OtsuGaussion_Library::~OtsuGaussion_Library()
