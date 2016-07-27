@@ -25,10 +25,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="otsugaussion_library.cpp">
+    <ClCompile Include="..\..\Common\SystemParams.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Common\SystemParams.cpp">
+    <ClCompile Include="otsugaussion_library.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

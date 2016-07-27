@@ -263,7 +263,7 @@ void OtsuGaussion_Library::ComputeOtsuGaussian()
 		cout << "¿é¥XÀÉ®×¡G" << binary_output << endl;
 	cv::imwrite(binary_output, local);
 }
-int OtsuGaussion_Library::Threshold(int *hist) 
+int OtsuGaussion_Library::Threshold(int *hist)
 {
 	float u0, u1;
 	float w0, w1;

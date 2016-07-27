@@ -75,7 +75,7 @@ void ParamsSet(int &i, char **argv)
 	{
 		QDir dir(argv[++i]);
 		QStringList temp1 = dir.entryList();
-		 
+
 		// 去掉前面兩個 . 跟 ..
 		for (int j = 2; j < temp1.size(); j++)
 		{
@@ -131,29 +131,29 @@ int main(int argc, char *argv[])
 	// 確定有沒有可以用的方法
 	if (!UseMethod)
 	{
-		cout << "沒有指定方法，所以無法執行!!" << endl;
-		return -1;
+	cout << "沒有指定方法，所以無法執行!!" << endl;
+	return -1;
 	}
 
 	OtsuGaussion_Library *tempImage;
 	for (int i = 0; i < DoList.size(); i++)
 	{
-		cout << "正在執行 " << (i + 1) << " / " << DoList.size() << endl;
-		tempImage = new OtsuGaussion_Library(DoList[i]->fileName.toStdString(), g_sigma, bs_sigma, ws_sigma, bool_debug ,DoList[i]->outDir.toStdString());
-		tempImage->ComputeOtsuGaussian();
-		delete tempImage;
-		cout << "完成 " << (i + 1) << " / " << DoList.size() << endl;
+	cout << "正在執行 " << (i + 1) << " / " << DoList.size() << endl;
+	tempImage = new OtsuGaussion_Library(DoList[i]->fileName.toStdString(), g_sigma, bs_sigma, ws_sigma, bool_debug, DoList[i]->outDir.toStdString());
+	tempImage->ComputeOtsuGaussian();
+	delete tempImage;
+	cout << "完成 " << (i + 1) << " / " << DoList.size() << endl;
 	}
 
 	// 寫檔案名稱，給接下來的程序做
-	/*QFile file("FileLog.txt");
+	QFile file("FileLog.txt");
 	file.open(QIODevice::WriteOnly | QIODevice::Text);
 
 	QTextStream ss(&file);
-	ss << "總共檔案數量: " << DoList.size() << endl;
-	ss << "狀態： 完成二值化!!" << endl;
-	ss << "檔案：" << endl;
+	ss << "Total File Count: " << DoList.size() << endl;
+	ss << "Status： Complete Binarization!!" << endl;
+	ss << "Files：" << endl;
 	for (int i = 0; i < DoList.size(); i++)
-		ss << QString::fromStdString(SystemParams::str_Resources_Binarization) <<  DoList[i]->outDir + DoList[i]->fileName << endl;*/
+	ss << QString::fromStdString(SystemParams::str_Resources_Binarization) <<  DoList[i]->outDir + DoList[i]->fileName << endl;
 	return 0;
 }

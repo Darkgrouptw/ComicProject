@@ -1,0 +1,16 @@
+﻿已經開始建置於 2016/7/26 下午 03:04:22。
+     1>節點 2 (Rebuild 目標) 上的專案 "D:\ComicProject\1. Binarization_CommandLine\OtsuGaussion_Library\OtsuGaussion_Library.vcxproj"。
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I.\GeneratedFiles /I. /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include /I.\GeneratedFiles\Release /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui /ID:\VGLibrary\opencv2.4.13\build\include /nologo /W1 /WX- /O2 /D UNICODE /D WIN32 /D WIN64 /D QT_DLL /D QT_NO_DEBUG /D NDEBUG /D QT_CORE_LIB /D QT_GUI_LIB /D OTSUGAUSSION_LIBRARY_LIB /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt ..\..\Common\SystemParams.cpp otsugaussion_library.cpp
+         SystemParams.cpp
+         otsugaussion_library.cpp
+         正在產生程式碼...
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"D:\ComicProject\1. Binarization_CommandLine\StaticLib\OtsuGaussion_Library.lib" /NOLOGO /MACHINE:X64 x64\Release\SystemParams.obj
+         x64\Release\otsugaussion_library.obj
+         OtsuGaussion_Library.vcxproj -> D:\ComicProject\1. Binarization_CommandLine\StaticLib\OtsuGaussion_Library.lib
+     1>專案 "D:\ComicProject\1. Binarization_CommandLine\OtsuGaussion_Library\OtsuGaussion_Library.vcxproj" (Rebuild 目標) 建置完成。
+
+建置成功。
+
+經過時間 00:00:01.15
