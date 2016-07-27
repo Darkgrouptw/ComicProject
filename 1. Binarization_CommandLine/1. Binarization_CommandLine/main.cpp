@@ -151,8 +151,8 @@ int main(int argc, char *argv[])
 
 	QTextStream ss(&file);
 	ss << "Total File Count: " << DoList.size() << endl;
-	ss << "Status¡G Complete Binarization!!" << endl;
-	ss << "Files¡G" << endl;
+	ss << "Status: Complete Binarization!!" << endl;
+	ss << "Files:" << endl;
 	for (int i = 0; i < DoList.size(); i++)
 	ss << QString::fromStdString(SystemParams::str_Resources_Binarization) <<  DoList[i]->outDir + DoList[i]->fileName << endl;
 	return 0;

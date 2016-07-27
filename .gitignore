@@ -1,6 +1,5 @@
-Output/Binarization/
-Output/Original/
+Output/
 Scan Comic/
+CommandLine/FileLog.txt
 1. Binarization_CommandLine/1. Binarization_CommandLine.sdf
 2. Segmentation_CommandLine/2. Segmentation_CommandLine.sdf
-CommandLine/FileLog.txt
