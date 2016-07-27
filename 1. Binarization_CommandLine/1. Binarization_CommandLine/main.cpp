@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
 	}
 
 	// 寫檔案名稱，給接下來的程序做
-	QFile file("FileLog.txt");
+	QFile file("../Output/FileLog.txt");
 	file.open(QIODevice::WriteOnly | QIODevice::Text);
 
 	QTextStream ss(&file);
