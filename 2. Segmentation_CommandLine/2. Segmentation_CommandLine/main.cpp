@@ -91,7 +91,6 @@ void ParamsSet(int &i, char **argv)
 				for (int i = 0; i < n; i ++)
 				{
 					tempLine = ss.readLine();
-					cout << i << " " << tempLine.toStdString() << endl;
 					DoInfo *doTemp = new DoInfo;
 					doTemp->fileName = tempLine;
 					doTemp->outDir = outDirTemp;

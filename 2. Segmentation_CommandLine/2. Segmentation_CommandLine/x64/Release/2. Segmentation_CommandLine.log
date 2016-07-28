@@ -1,4 +1,4 @@
-﻿已經開始建置於 2016/7/28 下午 05:55:52。
+﻿已經開始建置於 2016/7/28 下午 06:23:50。
      1>節點 2 (Rebuild 目標) 上的專案 "D:\ComicProject\2. Segmentation_CommandLine\2. Segmentation_CommandLine\2. Segmentation_CommandLine.vcxproj"。
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I. /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include /I.\GeneratedFiles\Release /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui /ID:\VGLibrary\opencv2.4.13\build\include /ID:\VGLibrary\boost_1_61_0\ /nologo /W1 /WX- /O2 /D UNICODE /D WIN32 /D WIN64 /D QT_DLL /D QT_NO_DEBUG /D NDEBUG /D QT_CORE_LIB /D QT_GUI_LIB /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt main.cpp
@@ -10,4 +10,4 @@
 
 建置成功。
 
-經過時間 00:00:01.01
+經過時間 00:00:00.90
