@@ -1,13 +1,20 @@
-﻿已經開始建置於 2016/7/20 上午 11:31:15。
+﻿已經開始建置於 2016/7/28 下午 05:55:49。
      1>節點 2 (Rebuild 目標) 上的專案 "D:\ComicProject\2. Segmentation_CommandLine\CartoonTexture_Segment_Library\CartoonTexture_Segment_Library.vcxproj"。
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I.\GeneratedFiles /I. /IC:\Qt\Qt5.7.0_x64\5.7\msvc2013_64\include /I.\GeneratedFiles\Release /IC:\Qt\Qt5.7.0_x64\5.7\msvc2013_64\include\QtCore /ID:\VGLibrary\opencv246\include /ID:\VGLibrary\opencv246\build\include /ID:\VGLibrary\opencv246\build\include\opencv /ID:\VGLibrary\opencv246\build\include\opencv2 /nologo /W1 /WX- /O2 /D UNICODE /D WIN32 /D WIN64 /D QT_DLL /D QT_NO_DEBUG /D NDEBUG /D QT_CORE_LIB /D CARTOONTEXTURE_SEGMENT_LIBRARY_LIB /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt ..\..\Common\SystemParams.cpp cartoontexture_segment_library.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I.\GeneratedFiles /I. /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include /I.\GeneratedFiles\Release /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore /ID:\VGLibrary\opencv2.4.13\build\include /ID:\VGLibrary\boost_1_61_0\ /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui /nologo /W1 /WX- /O2 /D UNICODE /D WIN32 /D WIN64 /D QT_DLL /D QT_NO_DEBUG /D NDEBUG /D QT_CORE_LIB /D CARTOONTEXTURE_SEGMENT_LIBRARY_LIB /D QT_GUI_LIB /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt ..\..\Common\SystemParams.cpp CartoonTextureFilter.cpp cartoontexture_segment_library.cpp LibCartoon.cpp
          SystemParams.cpp
+         CartoonTextureFilter.cpp
          cartoontexture_segment_library.cpp
-     1>cartoontexture_segment_library.cpp(2): fatal error C1083: 無法開啟包含檔案: 'boost/chrono.hpp': No such file or directory
+         LibCartoon.cpp
          正在產生程式碼...
-     1>專案 "D:\ComicProject\2. Segmentation_CommandLine\CartoonTexture_Segment_Library\CartoonTexture_Segment_Library.vcxproj" (Rebuild 目標) 建置完成 -- 失敗。
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"D:\ComicProject\2. Segmentation_CommandLine\StaticLib\CartoonTexture_Segment_Library.lib" /NOLOGO /MACHINE:X64 x64\Release\SystemParams.obj
+         x64\Release\CartoonTextureFilter.obj
+         x64\Release\cartoontexture_segment_library.obj
+         x64\Release\LibCartoon.obj
+         CartoonTexture_Segment_Library.vcxproj -> D:\ComicProject\2. Segmentation_CommandLine\StaticLib\CartoonTexture_Segment_Library.lib
+     1>專案 "D:\ComicProject\2. Segmentation_CommandLine\CartoonTexture_Segment_Library\CartoonTexture_Segment_Library.vcxproj" (Rebuild 目標) 建置完成。
 
-建置失敗。
+建置成功。
 
-經過時間 00:00:00.83
+經過時間 00:00:02.63

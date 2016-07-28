@@ -1,14 +1,17 @@
 #include <iostream>
 #include <QFile>
+#include <QTextStream>
 #include <QDir>
 #include <QString>
 #include "..\CartoonTexture_Segment_Library\cartoontexture_segment_library.h"
 
-vector<DoInfo *>	DoList;												// 要做的圖片 list
+using namespace std;
 struct DoInfo{
 	QString fileName;
 	QString outDir = "";
 };
+vector<DoInfo *>	DoList;												// 要做的圖片 list
+QString				outDirTemp;
 bool bool_debug = false;
 
 //////////////////////////////////////////////////////////////////////////
@@ -58,6 +61,45 @@ void ParamsSet(int &i, char **argv)
 		else
 			cout << tempStr.toStdString() << "	檔案不存在" << endl;
 	}
+	else if (params == "-last")
+	{
+		tempStr = QString(argv[++i]);
+		QFile file("../Output/FileLog.txt");
+		if (file.exists())
+			if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+			{
+				QTextStream ss(&file);
+				QString tempLine = ss.readLine();
+				
+				// 讀上次執行了幾個檔案
+				int n = tempLine.replace("Total File Count: ", "").toInt();
+				
+				// 讀 Status 是否是對的
+				tempLine = ss.readLine();
+				if (!tempLine.endsWith("Complete Binarization!!"))
+				{
+					cout << "FileLog 的 Status ，跟目前的步驟不合!!" << endl;
+					return;
+				}
+				
+				// OutDir
+				tempLine = ss.readLine();
+				outDirTemp = tempLine.replace("Out Dir: ", "");
+
+				// 接下來讀所有的檔案
+				tempLine = ss.readLine();
+				for (int i = 0; i < n; i ++)
+				{
+					tempLine = ss.readLine();
+					cout << i << " " << tempLine.toStdString() << endl;
+					DoInfo *doTemp = new DoInfo;
+					doTemp->fileName = tempLine;
+					doTemp->outDir = outDirTemp;
+					DoList.push_back(doTemp);
+				}
+			}
+		
+	}
 	else if (params == "-t")
 	{
 		QDir dir(argv[++i]);
@@ -76,7 +118,7 @@ void ParamsSet(int &i, char **argv)
 		}
 	}
 	else if (params == "-msize")
-		SystemParams::s_min_size_area = QString(argv[++i]);
+		SystemParams::s_min_size_area = QString::fromStdString(argv[++i]).toDouble();
 	else if (params == "-d")
 		bool_debug = true;
 }
@@ -88,9 +130,10 @@ int main(int argc, char *argv[])
 			ParamsSet(i, argv);
 
 	CartoonTexture_Segment_Library *tempSeg;
+	//cout << DoList[0]->fileName.toStdString() << endl;
 	for (int i = 0; i < DoList.size(); i++)
 	{
-		tempSeg = new CartoonTexture_Segment_Library(DoList[i].fileName);
+		tempSeg = new CartoonTexture_Segment_Library(DoList[i]->fileName.toStdString());
 		tempSeg->ComputeCTSegmentation();
 		delete tempSeg;
 	}

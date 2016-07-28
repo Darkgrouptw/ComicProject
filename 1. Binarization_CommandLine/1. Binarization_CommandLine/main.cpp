@@ -135,6 +135,11 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
+	
+	// 寫檔案名稱，給接下來的程序做
+	QFile file("../Output/FileLog.txt");
+	file.open(QIODevice::WriteOnly | QIODevice::Text);
+
 	OtsuGaussion_Library *tempImage;
 	for (int i = 0; i < DoList.size(); i++)
 	{
@@ -145,15 +150,18 @@ int main(int argc, char *argv[])
 		cout << "完成 " << (i + 1) << " / " << DoList.size() << endl;
 	}
 
-	// 寫檔案名稱，給接下來的程序做
-	QFile file("../Output/FileLog.txt");
-	file.open(QIODevice::WriteOnly | QIODevice::Text);
 
 	QTextStream ss(&file);
 	ss << "Total File Count: " << DoList.size() << endl;
 	ss << "Status: Complete Binarization!!" << endl;
+	ss << "Out Dir: " << DoList[0]->outDir << endl;
 	ss << "Files:" << endl;
 	for (int i = 0; i < DoList.size(); i++)
-	ss << QString::fromStdString(SystemParams::str_Resources_Binarization) <<  DoList[i]->outDir + DoList[i]->fileName << endl;
+		if (DoList[i]->fileName.endsWith(".bmp"))
+			ss << QString::fromStdString(SystemParams::str_Resources_Binarization) <<  DoList[i]->outDir + DoList[i]->fileName.replace(".bmp", "_1200_B.png") << endl;
+		else if (DoList[i]->fileName.endsWith(".jpg"))
+			ss << QString::fromStdString(SystemParams::str_Resources_Binarization) << DoList[i]->outDir + DoList[i]->fileName.replace(".jpg", "_1200_B.png") << endl;
+		else if (DoList[i]->fileName.endsWith(".png"))
+			ss << QString::fromStdString(SystemParams::str_Resources_Binarization) << DoList[i]->outDir + DoList[i]->fileName.replace(".png", "_1200_B.png") << endl;
 	return 0;
 }

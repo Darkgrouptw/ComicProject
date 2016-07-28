@@ -1,13 +1,13 @@
-﻿已經開始建置於 2016/7/20 上午 11:30:31。
-     1>節點 2 (Build 目標) 上的專案 "D:\ComicProject\2. Segmentation_CommandLine\2. Segmentation_CommandLine\2. Segmentation_CommandLine.vcxproj"。
+﻿已經開始建置於 2016/7/28 下午 05:55:52。
+     1>節點 2 (Rebuild 目標) 上的專案 "D:\ComicProject\2. Segmentation_CommandLine\2. Segmentation_CommandLine\2. Segmentation_CommandLine.vcxproj"。
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I. /IC:\Qt\Qt5.7.0_x64\5.7\msvc2013_64\include /I.\GeneratedFiles\Release /IC:\Qt\Qt5.7.0_x64\5.7\msvc2013_64\include\QtCore /IC:\Qt\Qt5.7.0_x64\5.7\msvc2013_64\include\QtGui /ID:\VGLibrary\opencv246\build\include /ID:\VGLibrary\opencv246\build\include\opencv /ID:\VGLibrary\opencv246\build\include\opencv2 /nologo /W1 /WX- /O2 /D UNICODE /D WIN32 /D WIN64 /D QT_DLL /D QT_NO_DEBUG /D NDEBUG /D QT_CORE_LIB /D QT_GUI_LIB /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt main.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I. /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include /I.\GeneratedFiles\Release /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui /ID:\VGLibrary\opencv2.4.13\build\include /ID:\VGLibrary\boost_1_61_0\ /nologo /W1 /WX- /O2 /D UNICODE /D WIN32 /D WIN64 /D QT_DLL /D QT_NO_DEBUG /D NDEBUG /D QT_CORE_LIB /D QT_GUI_LIB /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt main.cpp
          main.cpp
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"D:\ComicProject\2. Segmentation_CommandLine\..\CommandLine\\2. Segmentation_CommandLine.exe" /NOLOGO /LIBPATH:C:\Qt\Qt5.7.0_x64\5.7\msvc2013_64\lib /LIBPATH:..\StaticLib /LIBPATH:D:\VGLibrary\opencv246\build\x64\vc10\lib qtmain.lib Qt5Core.lib Qt5Gui.lib CartoonTexture_Segment_Library.lib opencv_core246.lib opencv_highgui246.lib opencv_imgproc246.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:"D:\ComicProject\2. Segmentation_CommandLine\..\CommandLine\2. Segmentation_CommandLine.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\ComicProject\2. Segmentation_CommandLine\..\CommandLine\2. Segmentation_CommandLine.lib" /MACHINE:X64 x64\Release\main.obj
-     1>LINK : fatal error LNK1181: 無法開啟輸入檔 'CartoonTexture_Segment_Library.lib'
-     1>專案 "D:\ComicProject\2. Segmentation_CommandLine\2. Segmentation_CommandLine\2. Segmentation_CommandLine.vcxproj" (Build 目標) 建置完成 -- 失敗。
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"D:\ComicProject\2. Segmentation_CommandLine\..\CommandLine\\2. Segmentation_CommandLine.exe" /NOLOGO /LIBPATH:C:\Qt\Qt5.7.0\5.7\msvc2013_64\lib /LIBPATH:D:\VGLibrary\opencv2.4.13\build\x64\vc12\lib /LIBPATH:"D:\VGLibrary\boost_1_61_0\lib64-msvc-12.0\\" /LIBPATH:..\StaticLib qtmain.lib Qt5Core.lib Qt5Gui.lib opencv_core2413.lib opencv_highgui2413.lib opencv_imgproc2413.lib CartoonTexture_Segment_Library.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:"D:\ComicProject\2. Segmentation_CommandLine\..\CommandLine\2. Segmentation_CommandLine.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\ComicProject\2. Segmentation_CommandLine\..\CommandLine\2. Segmentation_CommandLine.lib" /MACHINE:X64 x64\Release\main.obj
+         2. Segmentation_CommandLine.vcxproj -> D:\ComicProject\2. Segmentation_CommandLine\..\CommandLine\2. Segmentation_CommandLine.exe
+     1>專案 "D:\ComicProject\2. Segmentation_CommandLine\2. Segmentation_CommandLine\2. Segmentation_CommandLine.vcxproj" (Rebuild 目標) 建置完成。
 
-建置失敗。
+建置成功。
 
-經過時間 00:00:00.93
+經過時間 00:00:01.01

@@ -5,6 +5,7 @@
 CartoonTexture_Segment_Library::CartoonTexture_Segment_Library(string filename)
 {
 	this->filename = filename;
+	cout << filename;
 	this->inpImg = cv::imread(filename);
 	this->img_ori_width = inpImg.size().width;
 	this->img_ori_height = inpImg.size().height;
