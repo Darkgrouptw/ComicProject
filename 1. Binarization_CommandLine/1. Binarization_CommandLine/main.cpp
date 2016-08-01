@@ -157,11 +157,14 @@ int main(int argc, char *argv[])
 	ss << "Out Dir: " << DoList[0]->outDir << endl;
 	ss << "Files:" << endl;
 	for (int i = 0; i < DoList.size(); i++)
+	{
+		DoList[i]->fileName = DoList[i]->fileName.replace("\\", "/");
 		if (DoList[i]->fileName.endsWith(".bmp"))
-			ss << QString::fromStdString(SystemParams::str_Resources_Binarization) <<  DoList[i]->outDir + DoList[i]->fileName.replace(".bmp", "_1200_B.png").split("/").last() << endl;
+			ss << QString::fromStdString(SystemParams::str_Resources_Binarization) << DoList[i]->outDir + DoList[i]->fileName.replace(".bmp", "_1200_B.png").split("/").last() << endl;
 		else if (DoList[i]->fileName.endsWith(".jpg"))
 			ss << QString::fromStdString(SystemParams::str_Resources_Binarization) << DoList[i]->outDir + DoList[i]->fileName.replace(".jpg", "_1200_B.png").split("/").last() << endl;
 		else if (DoList[i]->fileName.endsWith(".png"))
 			ss << QString::fromStdString(SystemParams::str_Resources_Binarization) << DoList[i]->outDir + DoList[i]->fileName.replace(".png", "_1200_B.png").split("/").last() << endl;
+	}
 	return 0;
 }
