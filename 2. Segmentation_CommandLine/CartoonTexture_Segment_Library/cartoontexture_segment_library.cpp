@@ -1,14 +1,16 @@
 #include "cartoontexture_segment_library.h"
 #include "CartoonTextureFilter.h"
 
-CartoonTexture_Segment_Library::CartoonTexture_Segment_Library(string filename, string outDir)
+CartoonTexture_Segment_Library::CartoonTexture_Segment_Library(string filename, string outDir, bool bool_debug)
 {
 	this->fileName = filename;
 	this->inpImg = cv::imread(filename, CV_LOAD_IMAGE_GRAYSCALE);
 	this->img_ori_width = inpImg.size().width;
 	this->img_ori_height = inpImg.size().height;
+	this->bool_debug = bool_debug;
 
-	cout << "Width => " << img_ori_width << " Height => " << img_ori_height << endl;
+	if (bool_debug)
+		cout << "Width => " << img_ori_width << " Height => " << img_ori_height << endl;
 
 	QDir *dir = new QDir(QString::fromStdString(SystemParams::str_Resources_CFR));
 	if (!dir->exists())
@@ -59,7 +61,7 @@ void CartoonTexture_Segment_Library::RemoveSmallArea1(cv::Mat& segm)
 			cv::drawContours(segm, contours, a, cv::Scalar(0), -1);
 	}
 
-	// 玡 Cartoon暗家絢ノBox Filter┮Τて场だ程玻ネ獶0┪255场だ
+	// 玡 Cartoon 暗家絢ノBox Filter┮Τて场だ程玻ネ獶 0 ┪ 255 场だ
 	for (int i = 0; i < segm.cols; i++)
 		for (int j = 0; j < segm.rows; j++)
 			if (segm.ptr<uchar>(j, i)[0] > 0)
@@ -70,9 +72,7 @@ void CartoonTexture_Segment_Library::RemoveSmallArea1(cv::Mat& segm)
 void CartoonTexture_Segment_Library::RemoveSmallArea2(cv::Mat& segm)
 {
 	if (SystemParams::s_min_size_area == 0)
-	{
 		return;
-	}
 
 	vector<vector<cv::Point>> contours;
 	cv::findContours(segm, contours, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
@@ -84,20 +84,22 @@ void CartoonTexture_Segment_Library::RemoveSmallArea2(cv::Mat& segm)
 			cv::drawContours(segm, contours, a, cv::Scalar(255), -1);
 	}
 
-	// bug ???
+	// 玡 Cartoon 暗家絢ノBox Filter┮Τて场だ程玻ネ獶 0 ┪ 255 场だ
 	for (int i = 0; i < segm.cols; i++)
 		for (int j = 0; j < segm.rows; j++)
-		{
 			if (segm.ptr<uchar>(j, i)[0] > 0)
-			{
 				segm.ptr<uchar>(j, i)[0] = 255;
-			}
-		}
 
 	contours.clear();
 }
 void CartoonTexture_Segment_Library::ComputeCTSegmentation()
 {
+	if (IsBinary())
+	{
+		cout << fileName << " 瓜⊿Τ竒筁て!!" << endl;
+		return;
+	}
+
 	// 	狡籹瓜
 	cv::Mat ori_loacl_r = inpImg.clone();
 	string ori_fileName = fileName.substr(fileName.find_last_of("/") + 1);
@@ -113,53 +115,47 @@ void CartoonTexture_Segment_Library::ComputeCTSegmentation()
 	float stage = 0.2f;
 	int dpi = 1200;
 
-	cv::Mat resizeMat = ori_loacl_r.clone();
-	cv::Mat outSegm;
-	cv::Mat drawing;
-
-	//Timing calculation
 	for (int resizeTimes = 0; scale < 4.1f; resizeTimes++, scale += stage, dpi = 12000 / ((int)(scale * 10)), width = ori_width / scale, height = ori_height / scale)
 	{
+		cv::Mat resizeMat = ori_loacl_r.clone();
+		cv::Mat outSegm;
+		cv::Mat drawing;
+
 		string fileName;
 		if (resizeTimes != 0)
 		{
 			cv::resize(ori_loacl_r, resizeMat, cv::Size(width, height), 0, 0, cv::INTER_NEAREST);
-			fileName = MakeFileNameWithFlag(ori_fileName, dpi, "_B");//Binarization
+			// Binarization
+			fileName = MakeFileNameWithFlag(ori_fileName, dpi, "_B");
 			if (!cv::imwrite(SystemParams::str_Resources_Binarization + outDir + fileName, resizeMat))
 				cout << "Write File Failed: " << SystemParams::str_Resources_Binarization << outDir << fileName << endl;
 		}
 		outSegm = CartoonTextureFilter::DoSegmentation(resizeMat);
 		RemoveSmallArea1(outSegm);
 		RemoveSmallArea2(outSegm);
-		fileName = MakeFileNameWithFlag(ori_fileName, dpi, "_CFR");//Cartoon Filter Region
 
-		if (!cv::imwrite(SystemParams::str_Resources_CFR + outDir + fileName, outSegm)){
+		// Cartoon Filter Region
+		fileName = MakeFileNameWithFlag(ori_fileName, dpi, "_CFR");
+
+		if (!cv::imwrite(SystemParams::str_Resources_CFR + outDir + fileName, outSegm))
 			cout << "Write File Failed: " << SystemParams::str_Resources_CFR << outDir << fileName << endl;
-		}
 
 		drawing = cv::Mat::zeros(cv::Size(width, height), CV_8UC3);
-		//呼翴跋办︹
+		// 呼翴跋办︹
 		for (int i = 0; i < outSegm.rows; i++)
-		{
 			for (int j = 0; j < outSegm.cols; j++)
-			{
 				if (resizeMat.at<uchar>(i, j) != 0)
 				{
 					drawing.at<cv::Vec3b>(i, j) = cv::Vec3b(255, 255, 255);
-					//呼翴跋办
+					// 呼翴跋办 Shader + 30
 					if (outSegm.at<uchar>(i, j) != 0)
-					{
-						drawing.at<cv::Vec3b>(i, j) = cv::Vec3b(71, 137, 244);//shader +30
-					}
+						drawing.at<cv::Vec3b>(i, j) = cv::Vec3b(71, 137, 244);
 				}
-			}
-		}
 		fileName = MakeFileNameWithFlag(ori_fileName, dpi, "_CFC");//Cartoon Filter Color
 
 
-		if (!cv::imwrite(SystemParams::str_Resources_CFC + outDir + fileName, drawing)){
+		if (!cv::imwrite(SystemParams::str_Resources_CFC + outDir + fileName, drawing))
 			cout << "Write File Failed: " << SystemParams::str_Resources_CFC << outDir << fileName << endl;
-		}
 
 		resizeMat.release();
 		outSegm.release();

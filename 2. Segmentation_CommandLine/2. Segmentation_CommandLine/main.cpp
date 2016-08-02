@@ -3,6 +3,7 @@
 #include <QTextStream>
 #include <QDir>
 #include <QString>
+#include <QElapsedTimer>
 #include "..\CartoonTexture_Segment_Library\cartoontexture_segment_library.h"
 
 using namespace std;
@@ -125,18 +126,27 @@ void ParamsSet(int &i, char **argv)
 
 int main(int argc, char *argv[])
 {
+	QElapsedTimer timer;
+	timer.start();
+
 	for (int i = 1; i < argc; i++)
 		if (argv[i][0] == '-')
 			ParamsSet(i, argv);
 
-	CartoonTexture_Segment_Library *tempSeg;
+	int doneIndex = 0;
+	#pragma omp parallel for
 	for (int i = 0; i < DoList.size(); i++)
 	{
-		cout << "正在執行 " << (i + 1) << " / " << DoList.size() << endl;
-		tempSeg = new CartoonTexture_Segment_Library(DoList[i]->fileName.toStdString(), DoList[i]->outDir.toStdString());
+		CartoonTexture_Segment_Library *tempSeg;
+		tempSeg = new CartoonTexture_Segment_Library(DoList[i]->fileName.toStdString(), DoList[i]->outDir.toStdString(), bool_debug);
 		tempSeg->ComputeCTSegmentation();
 		delete tempSeg;
-		cout << "完成 " << (i + 1) << " / " << DoList.size() << endl;
+
+		#pragma omp critical
+		{
+			cout << "完成 " << (++doneIndex) << " / " << DoList.size() << endl;
+		}
 	}
+	cout << "時間 => " << (float)timer.elapsed() / 1000 << " s" << endl;
 	return 0;
 }

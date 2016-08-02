@@ -15,7 +15,7 @@ using namespace std;
 class CartoonTexture_Segment_Library
 {
 public:
-	CartoonTexture_Segment_Library(string, string);
+	CartoonTexture_Segment_Library(string, string, bool);
 	~CartoonTexture_Segment_Library();
 
 	void ComputeCTSegmentation();
@@ -27,6 +27,7 @@ public:
 private:
 	string				fileName;			// 檔案名稱
 	string				outDir;				// 輸出的目錄
+	bool				bool_debug;
 
 	cv::Mat				inpImg;				// 要操作的圖
 	int					img_ori_width;		// 原圖寬

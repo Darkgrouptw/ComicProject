@@ -1,11 +1,3 @@
-
-/**
- *
- * Reza Adhitya Saputra (reza.adhitya.saputra@gmail.com)
- * Version: 2014
- *
- */
-
 #include "CartoonTextureFilter.h"
 #include "LibCartoon.h"
 #include "..\..\Common\SystemParams.h"
