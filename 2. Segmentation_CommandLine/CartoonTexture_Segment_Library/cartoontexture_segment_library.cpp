@@ -1,18 +1,44 @@
 #include "cartoontexture_segment_library.h"
-#include <boost/chrono.hpp>
 #include "CartoonTextureFilter.h"
 
-CartoonTexture_Segment_Library::CartoonTexture_Segment_Library(string filename)
+CartoonTexture_Segment_Library::CartoonTexture_Segment_Library(string filename, string outDir)
 {
-	this->filename = filename;
-	cout << filename;
-	this->inpImg = cv::imread(filename);
+	this->fileName = filename;
+	this->inpImg = cv::imread(filename, CV_LOAD_IMAGE_GRAYSCALE);
 	this->img_ori_width = inpImg.size().width;
 	this->img_ori_height = inpImg.size().height;
 
 	cout << "Width => " << img_ori_width << " Height => " << img_ori_height << endl;
-}
 
+	QDir *dir = new QDir(QString::fromStdString(SystemParams::str_Resources_CFR));
+	if (!dir->exists())
+		dir->mkdir(".");
+	delete dir;
+
+	dir = new QDir(QString::fromStdString(SystemParams::str_Resources_CFC));
+	if (!dir->exists())
+		dir->mkdir(".");
+	delete dir;
+
+	if (outDir != "")
+	{
+		dir = new QDir(QString::fromStdString(SystemParams::str_Resources_Binarization + outDir));
+		if (!dir->exists())
+			dir->mkdir(".");
+		delete dir;
+
+		dir = new QDir(QString::fromStdString(SystemParams::str_Resources_CFR + outDir));
+		if (!dir->exists())
+			dir->mkdir(".");
+		delete dir;
+
+		dir = new QDir(QString::fromStdString(SystemParams::str_Resources_CFC + outDir));
+		if (!dir->exists())
+			dir->mkdir(".");
+		delete dir;
+	}
+	this->outDir = outDir;
+}
 CartoonTexture_Segment_Library::~CartoonTexture_Segment_Library()
 {
 
@@ -33,15 +59,11 @@ void CartoonTexture_Segment_Library::RemoveSmallArea1(cv::Mat& segm)
 			cv::drawContours(segm, contours, a, cv::Scalar(0), -1);
 	}
 
-	// bug ???
+	// 因為前面 Cartoon在做模糊的時候，用Box Filter，所以有可能二值化的部分，最後產生非0或255的部分
 	for (int i = 0; i < segm.cols; i++)
 		for (int j = 0; j < segm.rows; j++)
-		{
 			if (segm.ptr<uchar>(j, i)[0] > 0)
-			{
 				segm.ptr<uchar>(j, i)[0] = 255;
-			}
-		}
 
 	contours.clear();
 }
@@ -76,18 +98,15 @@ void CartoonTexture_Segment_Library::RemoveSmallArea2(cv::Mat& segm)
 }
 void CartoonTexture_Segment_Library::ComputeCTSegmentation()
 {
-	if (!IsBinary())
-	{
-		cout << "此沒有二值化過喔!!" << endl;
-		return;
-	}
-
 	// 	複製原圖
 	cv::Mat ori_loacl_r = inpImg.clone();
-	string ori_fileName = this->filename.substr(this->filename.find_last_of("/") + 1);
-
-	int ori_width = this->img_ori_width;
-	int ori_height = this->img_ori_height;
+	string ori_fileName = fileName.substr(fileName.find_last_of("/") + 1);
+	string subName = ori_fileName.substr(ori_fileName.find_last_of("."), ori_fileName.length() - ori_fileName.find_last_of("."));
+	ori_fileName = ori_fileName.substr(0, ori_fileName.find_last_of("_B") - 1);
+	ori_fileName = ori_fileName.substr(0, ori_fileName.find_last_of("_"));
+	ori_fileName += subName;
+	int ori_width = ori_loacl_r.cols;
+	int ori_height = ori_loacl_r.rows;
 	int width = ori_width;
 	int height = ori_height;
 	float scale = 1.0f;
@@ -98,29 +117,24 @@ void CartoonTexture_Segment_Library::ComputeCTSegmentation()
 	cv::Mat outSegm;
 	cv::Mat drawing;
 
-	using namespace boost::chrono;
-	auto start = steady_clock::now();
+	//Timing calculation
 	for (int resizeTimes = 0; scale < 4.1f; resizeTimes++, scale += stage, dpi = 12000 / ((int)(scale * 10)), width = ori_width / scale, height = ori_height / scale)
 	{
 		string fileName;
-		// Timing calculation
 		if (resizeTimes != 0)
 		{
 			cv::resize(ori_loacl_r, resizeMat, cv::Size(width, height), 0, 0, cv::INTER_NEAREST);
-
 			fileName = MakeFileNameWithFlag(ori_fileName, dpi, "_B");//Binarization
-
-			if (!cv::imwrite(SystemParams::str_Resources_Binarization + "/" + fileName, resizeMat)){
-				cout << "Write File Failed: " << SystemParams::str_Resources_Binarization << "/" << fileName << endl;
-			}
+			if (!cv::imwrite(SystemParams::str_Resources_Binarization + outDir + fileName, resizeMat))
+				cout << "Write File Failed: " << SystemParams::str_Resources_Binarization << outDir << fileName << endl;
 		}
 		outSegm = CartoonTextureFilter::DoSegmentation(resizeMat);
 		RemoveSmallArea1(outSegm);
 		RemoveSmallArea2(outSegm);
 		fileName = MakeFileNameWithFlag(ori_fileName, dpi, "_CFR");//Cartoon Filter Region
 
-		if (!cv::imwrite(SystemParams::str_Resources_CFR + "/" + fileName, outSegm)){
-			cout << "Write File Failed: " << SystemParams::str_Resources_CFR << "/" << fileName << endl;
+		if (!cv::imwrite(SystemParams::str_Resources_CFR + outDir + fileName, outSegm)){
+			cout << "Write File Failed: " << SystemParams::str_Resources_CFR << outDir << fileName << endl;
 		}
 
 		drawing = cv::Mat::zeros(cv::Size(width, height), CV_8UC3);
@@ -140,69 +154,19 @@ void CartoonTexture_Segment_Library::ComputeCTSegmentation()
 				}
 			}
 		}
-
 		fileName = MakeFileNameWithFlag(ori_fileName, dpi, "_CFC");//Cartoon Filter Color
 
-		if (!cv::imwrite(SystemParams::str_Resources_CFC + "/" + fileName, drawing)){
-			cout << "Write File Failed: " << SystemParams::str_Resources_CFC << "/" << fileName << endl;
+
+		if (!cv::imwrite(SystemParams::str_Resources_CFC + outDir + fileName, drawing)){
+			cout << "Write File Failed: " << SystemParams::str_Resources_CFC << outDir << fileName << endl;
 		}
-		if (resizeTimes == 0)
-		{
-			if (labelMap)
-			{
-				free(labelMap);
-				labelMap = NULL;
-			}
-			labelMap = (int*)malloc(width * height * sizeof(int));
-			// Copy to label map
-			for (int i = 0; i < height; i++)
-			{
-				for (int j = 0; j < width; j++)
-				{
-					if (outSegm.ptr<uchar>(i, j)[0] > 0)
-					{
-						labelMap[i * width + j] = 0;
-					}
-					else
-					{
-						labelMap[i * width + j] = -1;
-					}
-				}
-			}
-			// Dilated Label Map (NEED TO FIX THIS!)
-			cv::Mat elem2 = cv::getStructuringElement(2, cv::Size(10, 10));
-			//for(int a = 0; a < 3; a++)
-			cv::morphologyEx(outSegm, outSegm, cv::MORPH_DILATE, elem2);
-			if (dilatedLabelMap)
-			{
-				free(dilatedLabelMap);
-				dilatedLabelMap = NULL;
-			}
-			dilatedLabelMap = (int*)malloc(width * height * sizeof(int));
-			// Dilated Label Map
-			outSegm.convertTo(outSegm, CV_8UC1);
-			for (int i = 0; i < height; i++)
-			{
-				for (int j = 0; j < width; j++)
-				{
-					if (outSegm.ptr<uchar>(i, j)[0] > 0)
-					{
-						dilatedLabelMap[i * width + j] = 0;
-					}
-					else
-					{
-						dilatedLabelMap[i * width + j] = -1;
-					}
-				}
-			}
-		}
+
 		resizeMat.release();
 		outSegm.release();
 		drawing.release();
+
 	}
-	auto dur = steady_clock::now() - start;
-	auto msDur = duration_cast<milliseconds>(dur).count();
-	cout << "Cartoon+Texture Segmentation time: " << msDur << " milliseconds\n";
+	ori_loacl_r.release();
 }
 
 bool CartoonTexture_Segment_Library::IsBinary()

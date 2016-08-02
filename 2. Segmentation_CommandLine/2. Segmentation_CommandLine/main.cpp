@@ -39,6 +39,7 @@ void ParamsSet(int &i, char **argv)
 		cout << endl;
 		cout << "把σ把计(耚)" << endl;
 		cout << "-msize <计>			程跋遏把计 (ex: 5000)" << endl;
+		cout << "";
 		cout << "-d				陪ボ Debug 戈癟" << endl;
 		cout << endl;
 		cout << "絛ㄒ" << endl;
@@ -129,12 +130,13 @@ int main(int argc, char *argv[])
 			ParamsSet(i, argv);
 
 	CartoonTexture_Segment_Library *tempSeg;
-	//cout << DoList[0]->fileName.toStdString() << endl;
 	for (int i = 0; i < DoList.size(); i++)
 	{
-		tempSeg = new CartoonTexture_Segment_Library(DoList[i]->fileName.toStdString());
+		cout << "タ磅︽ " << (i + 1) << " / " << DoList.size() << endl;
+		tempSeg = new CartoonTexture_Segment_Library(DoList[i]->fileName.toStdString(), DoList[i]->outDir.toStdString());
 		tempSeg->ComputeCTSegmentation();
 		delete tempSeg;
+		cout << "ЧΘ " << (i + 1) << " / " << DoList.size() << endl;
 	}
 	return 0;
 }

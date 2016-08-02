@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "../../Common/SystemParams.h"
+#include <QDir>
 
 // OpenCV
 #include <opencv2/core/core.hpp>
@@ -14,26 +15,22 @@ using namespace std;
 class CartoonTexture_Segment_Library
 {
 public:
-	CartoonTexture_Segment_Library(string filename);
+	CartoonTexture_Segment_Library(string, string);
 	~CartoonTexture_Segment_Library();
 
 	void ComputeCTSegmentation();
 	void RemoveSmallArea1(cv::Mat&);
 	void RemoveSmallArea2(cv::Mat&);
 
-	//string Os
 	string MakeFileNameWithFlag(string, int, string);
 	bool IsBinary();
 private:
-	string				filename;			// 檔案名稱
+	string				fileName;			// 檔案名稱
+	string				outDir;				// 輸出的目錄
 
 	cv::Mat				inpImg;				// 要操作的圖
 	int					img_ori_width;		// 原圖寬
 	int					img_ori_height;		// 原圖高
-
-
-	int* labelMap;
-	int* dilatedLabelMap;
 };
 
 #endif // CARTOONTEXTURE_SEGMENT_LIBRARY_H

@@ -38,7 +38,6 @@ void non_linear_cartoon(float * input, float * out, float sigma,  int width, int
 	int ksize;
 	float *kernel = fiFloatGaussKernel(sigma,ksize);
 
-
 	// auxiliary variable for gradient computation
 	float *grad = (float *) malloc(size*sizeof(float));
 
@@ -54,9 +53,9 @@ void non_linear_cartoon(float * input, float * out, float sigma,  int width, int
 	int niter = 5;          
 	low_pass_filter(input,gconvolved,sigma,niter,width,height);
 
-	float *ratio2 = (float *) malloc(size*sizeof(float));
-	fiComputeImageGradient(gconvolved,grad,NULL,width,height);
-	fiSepConvol(grad,ratio2,width,height, kernel, ksize,kernel,ksize);
+	float *ratio2 = (float *)malloc(size*sizeof(float));
+	fiComputeImageGradient(gconvolved, grad, NULL, width, height);
+	fiSepConvol(grad, ratio2, width, height, kernel, ksize, kernel, ksize);
 
 	// for each pixel compute the weighted average  of  G_sigma * |Df| 
 	// and G*|D(L_sigma*f)| 
