@@ -4,6 +4,7 @@
 #include <QStringList>
 #include <QTextStream>
 #include <QIODevice>
+#include <QElapsedTimer>
 #include "..\OtsuGaussion_Library\otsugaussion_library.h"
 
 using namespace std;
@@ -124,6 +125,9 @@ void ParamsSet(int &i, char **argv)
 
 int main(int argc, char *argv[])
 {
+	// 計時
+	QElapsedTimer timer;
+	timer.start();
 	for (int i = 1; i < argc; i++)
 		if (argv[i][0] == '-')
 			ParamsSet(i, argv);
@@ -140,14 +144,19 @@ int main(int argc, char *argv[])
 	QFile file("../Output/FileLog.txt");
 	file.open(QIODevice::WriteOnly | QIODevice::Text);
 
-	OtsuGaussion_Library *tempImage;
+	int doneIndex = 0;
+	#pragma omp parallel for
 	for (int i = 0; i < DoList.size(); i++)
 	{
-		cout << "正在執行 " << (i + 1) << " / " << DoList.size() << endl;
+		OtsuGaussion_Library *tempImage;
 		tempImage = new OtsuGaussion_Library(DoList[i]->fileName.toStdString(), g_sigma, bs_sigma, ws_sigma, bool_debug, DoList[i]->outDir.toStdString());
 		tempImage->ComputeOtsuGaussian();
 		delete tempImage;
-		cout << "完成 " << (i + 1) << " / " << DoList.size() << endl;
+
+		#pragma omp critical
+		{
+			cout << "完成 " << (++doneIndex) << " / " << DoList.size() << endl;
+		}
 	}
 
 
@@ -166,5 +175,6 @@ int main(int argc, char *argv[])
 		else if (DoList[i]->fileName.endsWith(".png"))
 			ss << QString::fromStdString(SystemParams::str_Resources_Binarization) << DoList[i]->outDir + DoList[i]->fileName.replace(".png", "_1200_B.png").split("/").last() << endl;
 	}
+	cout << "時間 => " << (float)timer.elapsed() / 1000 << " s" << endl;
 	return 0;
 }

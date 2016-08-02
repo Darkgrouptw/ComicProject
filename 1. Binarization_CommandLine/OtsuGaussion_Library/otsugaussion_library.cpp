@@ -228,7 +228,8 @@ void OtsuGaussion_Library::ComputeOtsuGaussian()
 		black_max_sigma = SystemParams::OG_Bsigma;
 	if (SystemParams::OG_Wsigma != 0)
 		white_max_sigma = SystemParams::OG_Wsigma;
-	cout << black_max_sigma << " : " << white_max_sigma << endl;
+	if (bool_debug)
+		cout << black_max_sigma << " : " << white_max_sigma << endl;
 
 	for (int i = 0; i<gray_image.cols; i++)
 	{
