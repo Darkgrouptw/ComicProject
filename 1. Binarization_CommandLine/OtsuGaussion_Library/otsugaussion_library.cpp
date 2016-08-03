@@ -17,11 +17,27 @@ OtsuGaussion_Library::OtsuGaussion_Library(string filename, int g_sigma, int b_s
 	SystemParams::OG_Bsigma = b_sigma;
 	SystemParams::OG_Wsigma = w_sigma;
 
-	QDir *dir = new QDir(QString((SystemParams::str_Resources_Original + outDir).c_str()));
+	#pragma region 判斷目錄有沒有存在
+	QDir *dir = new QDir(QString("../Output"));
 	if (!dir->exists())
 		dir->mkdir(".");
 	delete dir;
-	dir = new QDir(QString((SystemParams::str_Resources_Binarization + outDir).c_str()));
+
+	dir = new QDir(QString::fromStdString(SystemParams::str_Resources_Original));
+	if (!dir->exists())
+		dir->mkdir(".");
+	delete dir;
+
+	dir = new QDir(QString::fromStdString(SystemParams::str_Resources_Binarization));
+	if (!dir->exists())
+		dir->mkdir(".");
+	delete dir;
+
+	dir = new QDir(QString::fromStdString(SystemParams::str_Resources_Original + outDir));
+	if (!dir->exists())
+		dir->mkdir(".");
+	delete dir;
+	dir = new QDir(QString::fromStdString(SystemParams::str_Resources_Binarization + outDir));
 	if (!dir->exists())
 		dir->mkdir(".");
 	delete dir;
@@ -30,6 +46,7 @@ OtsuGaussion_Library::OtsuGaussion_Library(string filename, int g_sigma, int b_s
 		this->filename = temp.split("/").last().toStdString();
 	else if (temp.contains("\\"))
 		this->filename = temp.split("\\").last().toStdString();
+	#pragma endregion
 
 	cv::imwrite(SystemParams::str_Resources_Original + outDir + this->filename, oriInpImg);
 }
@@ -43,8 +60,7 @@ void OtsuGaussion_Library::ComputeOtsuGaussian()
 	if (bool_debug)
 		cout << "進去Otsu_Gaussian" << endl;
 
-	//轉灰階	
-	//cv::Mat gray_image = this->oriInpImg.clone();
+	//轉灰階
 	cv::Mat gray_image;
 	cv::cvtColor(oriInpImg, gray_image, CV_BGR2GRAY);
 
@@ -70,8 +86,11 @@ void OtsuGaussion_Library::ComputeOtsuGaussian()
 		//寫出二值化圖片
 		string ori_fileName = filename.substr(filename.find_last_of("/") + 1);
 		string FileName = MakeFileNameWithFlag(ori_fileName, 1200, "_B");
-		binary_output = SystemParams::str_Resources_Binarization + "/" + FileName;
-		cv::imwrite(binary_output, gray_image);
+		binary_output = SystemParams::str_Resources_Binarization + outDir + FileName;
+		#pragma omp critical
+		{
+			cv::imwrite(binary_output, gray_image);
+		}
 		return;
 	}
 	if (bool_debug)
@@ -263,7 +282,11 @@ void OtsuGaussion_Library::ComputeOtsuGaussian()
 
 	if (bool_debug)
 		cout << "輸出檔案：" << binary_output << endl;
-	cv::imwrite(binary_output, local);
+
+	#pragma omp critical
+	{
+		cv::imwrite(binary_output, local);
+	}
 }
 int OtsuGaussion_Library::Threshold(int *hist)
 {
