@@ -7,7 +7,7 @@ OtsuGaussion_Library::OtsuGaussion_Library(string filename, int g_sigma, int b_s
 	this->oriInpImg = inpImg.clone();
 	this->img_ori_width = inpImg.size().width;
 	this->img_ori_height = inpImg.size().height;
-	this->outDir = outDir;
+	this->outDir = QString::fromStdString(outDir).replace("\\", "/").toStdString();
 	this->bool_debug = Debug;
 
 	if (bool_debug)
@@ -19,20 +19,24 @@ OtsuGaussion_Library::OtsuGaussion_Library(string filename, int g_sigma, int b_s
 
 	QDir *dir = new QDir(QString::fromStdString(SystemParams::str_Resources_Original + outDir));
 	if (!dir->exists())
-		dir->mkdir(".");
+		dir->mkpath(".");
 	delete dir;
 	dir = new QDir(QString::fromStdString(SystemParams::str_Resources_Binarization + outDir));
 	if (!dir->exists())
-		dir->mkdir(".");
+		dir->mkpath(".");
 	delete dir;
+
 	QString temp = QString::fromStdString(filename);
 	if (temp.contains("/"))
 		this->filename = temp.split("/").last().toStdString();
 	else if (temp.contains("\\"))
 		this->filename = temp.split("\\").last().toStdString();
-	#pragma endregion
 
-	cv::imwrite(SystemParams::str_Resources_Original + outDir + this->filename, oriInpImg);
+	temp = QString::fromStdString(this->outDir);
+	if (!(temp.endsWith("/") || temp.endsWith("\\")))
+		this->outDir += "/";
+
+	cv::imwrite(SystemParams::str_Resources_Original + this->outDir + this->filename, oriInpImg);
 }
 OtsuGaussion_Library::~OtsuGaussion_Library()
 {

@@ -50,12 +50,17 @@ void ParamsSet(int &i, char **argv)
 		cout << "-op <數字> <數字>		Otsu 的參數" << endl;
 		cout << "-gp <數字> <數字> <數字>	Gaussian 參數設定 <平移> <black> <white>" << endl;
 		cout << "-d				顯示 Debug 資訊" << endl;
+		cout << "-dir				輸出的資料夾" << endl;
 		cout << endl;
+		cout << "===========================================" << endl;
 		cout << "範例：" << endl;
-		cout << "	假設只執行單張圖片，可以打" << endl;
-		cout << "<exe檔> -i 1.png -m 2" << endl;
-		cout << "	假設要執行檔個目錄裡面的圖檔，可以打" << endl;
-		cout << "<exe檔> -t \"D:/123/\" -m 2" << endl;
+		cout << "===========================================" << endl;
+		cout << "‧假設只執行單張圖片，可以打" << endl;
+		cout << "<exe檔> -i 1.png -m 2" << endl << endl;
+		cout << "‧假設要執行檔個目錄裡面的圖檔，可以打" << endl;
+		cout << "<exe檔> -t \"D:/123/\" -m 2" << endl << endl;
+		cout << "‧假設要輸出在特定的資料架內，可以打" << endl;
+		cout << "<exe檔> -t \"D:/123/\" -m 2 -dir \"abc/\"" << endl << endl;
 		exit(0);
 	}
 	else if (params == "-i")
@@ -85,7 +90,6 @@ void ParamsSet(int &i, char **argv)
 				DoInfo *tempDoList = new DoInfo;
 				tempDoList->fileName = dir.absolutePath() + "/" + temp1[j];
 				tempDoList->method = -1;
-				tempDoList->outDir = dir.absolutePath().split("/").last() + "/";
 				DoList.push_back(tempDoList);
 			}
 		}
@@ -115,6 +119,12 @@ void ParamsSet(int &i, char **argv)
 	}
 	else if (params == "-d")
 		bool_debug = true;
+	else if (params == "-dir")
+	{
+		QString tempDir = QString(argv[++i]);
+		for (int j = 0; j < DoList.size(); j++)
+			DoList[j]->outDir = tempDir;
+	}
 	else
 	{
 		cout << "沒有這個方法喔!!" << endl;
@@ -144,17 +154,17 @@ int main(int argc, char *argv[])
 	#pragma region 產生目錄
 	QDir *dir = new QDir(QString("../Output"));
 	if (!dir->exists())
-		dir->mkdir(".");
+		dir->mkpath(".");
 	delete dir;
 
 	dir = new QDir(QString::fromStdString(SystemParams::str_Resources_Original));
 	if (!dir->exists())
-		dir->mkdir(".");
+		dir->mkpath(".");
 	delete dir;
 
 	dir = new QDir(QString::fromStdString(SystemParams::str_Resources_Binarization));
 	if (!dir->exists())
-		dir->mkdir(".");
+		dir->mkpath(".");
 	delete dir;
 	#pragma endregion
 
