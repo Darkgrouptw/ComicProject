@@ -70,7 +70,6 @@ void OtsuGaussion_Library::ComputeOtsuGaussian()
 	int t = Threshold(hist);
 	if (t == 0)
 	{
-		cout << "done" << endl;
 		//寫出二值化圖片
 		string ori_fileName = filename.substr(filename.find_last_of("/") + 1);
 		string FileName = MakeFileNameWithFlag(ori_fileName, 1200, "_B");

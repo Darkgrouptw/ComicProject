@@ -1,4 +1,4 @@
-﻿已經開始建置於 2016/8/4 下午 01:12:58。
+﻿已經開始建置於 2016/8/4 下午 02:06:03。
      1>節點 2 (Build 目標) 上的專案 "D:\ComicProject\1. Binarization_CommandLine\OtsuGaussion_Library\OtsuGaussion_Library.vcxproj"。
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I.\GeneratedFiles /I. /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include /I.\GeneratedFiles\Release /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui /ID:\VGLibrary\opencv2.4.13\build\include /nologo /W1 /WX- /O2 /D UNICODE /D WIN32 /D WIN64 /D QT_DLL /D QT_NO_DEBUG /D NDEBUG /D QT_CORE_LIB /D QT_GUI_LIB /D OTSUGAUSSION_LIBRARY_LIB /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt otsugaussion_library.cpp
@@ -11,4 +11,4 @@
 
 建置成功。
 
-經過時間 00:00:03.67
+經過時間 00:00:00.99

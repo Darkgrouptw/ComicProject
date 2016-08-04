@@ -11,9 +11,9 @@ using namespace std;
 struct DoInfo{
 	QString fileName;													// 檔案名稱
 	int method;															// 使用的方法
-	QString outDir;														// 輸出時前面會多加這個名稱
 };
 vector<DoInfo *>	DoList;												// 要做的圖片 list
+QString				outDir;
 bool				UseMethod = false;									// 必須要是 true
 bool				bool_debug = false;
 int					g_sigma = 0;
@@ -71,7 +71,6 @@ void ParamsSet(int &i, char **argv)
 			DoInfo *tempDoList = new DoInfo;
 			tempDoList->fileName = tempStr;
 			tempDoList->method = -1;
-			tempDoList->outDir = "";
 			DoList.push_back(tempDoList);
 		}
 		else
@@ -120,11 +119,7 @@ void ParamsSet(int &i, char **argv)
 	else if (params == "-d")
 		bool_debug = true;
 	else if (params == "-dir")
-	{
-		QString tempDir = QString(argv[++i]);
-		for (int j = 0; j < DoList.size(); j++)
-			DoList[j]->outDir = tempDir;
-	}
+		outDir = QString(argv[++i]);
 	else
 	{
 		cout << "沒有這個方法喔!!" << endl;
@@ -176,7 +171,7 @@ int main(int argc, char *argv[])
 	for (int i = 0; i < DoList.size(); i++)
 	{
 		OtsuGaussion_Library *tempImage;
-		tempImage = new OtsuGaussion_Library(DoList[i]->fileName.toStdString(), g_sigma, bs_sigma, ws_sigma, bool_debug, DoList[i]->outDir.toStdString());
+		tempImage = new OtsuGaussion_Library(DoList[i]->fileName.toStdString(), g_sigma, bs_sigma, ws_sigma, bool_debug, outDir.toStdString());
 		tempImage->ComputeOtsuGaussian();
 		delete tempImage;
 
@@ -190,17 +185,17 @@ int main(int argc, char *argv[])
 	QTextStream ss(&file);
 	ss << "Total File Count: " << DoList.size() << endl;
 	ss << "Status: Complete Binarization!!" << endl;
-	ss << "Out Dir: " << DoList[0]->outDir << endl;
+	ss << "Out Dir: " << outDir << endl;
 	ss << "Files:" << endl;
 	for (int i = 0; i < DoList.size(); i++)
 	{
 		DoList[i]->fileName = DoList[i]->fileName.replace("\\", "/");
 		if (DoList[i]->fileName.endsWith(".bmp"))
-			ss << QString::fromStdString(SystemParams::str_Resources_Binarization) << DoList[i]->outDir + DoList[i]->fileName.replace(".bmp", "_1200_B.png").split("/").last() << endl;
+			ss << QString::fromStdString(SystemParams::str_Resources_Binarization) << outDir + DoList[i]->fileName.replace(".bmp", "_1200_B.png").split("/").last() << endl;
 		else if (DoList[i]->fileName.endsWith(".jpg"))
-			ss << QString::fromStdString(SystemParams::str_Resources_Binarization) << DoList[i]->outDir + DoList[i]->fileName.replace(".jpg", "_1200_B.png").split("/").last() << endl;
+			ss << QString::fromStdString(SystemParams::str_Resources_Binarization) << outDir + DoList[i]->fileName.replace(".jpg", "_1200_B.png").split("/").last() << endl;
 		else if (DoList[i]->fileName.endsWith(".png"))
-			ss << QString::fromStdString(SystemParams::str_Resources_Binarization) << DoList[i]->outDir + DoList[i]->fileName.replace(".png", "_1200_B.png").split("/").last() << endl;
+			ss << QString::fromStdString(SystemParams::str_Resources_Binarization) << outDir + DoList[i]->fileName.replace(".png", "_1200_B.png").split("/").last() << endl;
 	}
 	cout << "時間 => " << (float)timer.elapsed() / 1000 << " s" << endl;
 	return 0;
