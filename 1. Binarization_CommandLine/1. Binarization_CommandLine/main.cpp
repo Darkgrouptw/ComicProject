@@ -166,6 +166,9 @@ int main(int argc, char *argv[])
 	QFile file("../Output/FileLog.txt");
 	file.open(QIODevice::WriteOnly | QIODevice::Text);
 
+	if (!(outDir.endsWith("/") || outDir.endsWith("\\")))
+		outDir += "/";
+
 	int doneIndex = 0;
 	#pragma omp parallel for
 	for (int i = 0; i < DoList.size(); i++)

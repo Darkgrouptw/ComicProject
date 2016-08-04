@@ -32,10 +32,6 @@ OtsuGaussion_Library::OtsuGaussion_Library(string filename, int g_sigma, int b_s
 	else if (temp.contains("\\"))
 		this->filename = temp.split("\\").last().toStdString();
 
-	temp = QString::fromStdString(this->outDir);
-	if (!(temp.endsWith("/") || temp.endsWith("\\")))
-		this->outDir += "/";
-
 	cv::imwrite(SystemParams::str_Resources_Original + this->outDir + this->filename, oriInpImg);
 }
 OtsuGaussion_Library::~OtsuGaussion_Library()
