@@ -17,23 +17,7 @@ OtsuGaussion_Library::OtsuGaussion_Library(string filename, int g_sigma, int b_s
 	SystemParams::OG_Bsigma = b_sigma;
 	SystemParams::OG_Wsigma = w_sigma;
 
-	#pragma region 判斷目錄有沒有存在
-	QDir *dir = new QDir(QString("../Output"));
-	if (!dir->exists())
-		dir->mkdir(".");
-	delete dir;
-
-	dir = new QDir(QString::fromStdString(SystemParams::str_Resources_Original));
-	if (!dir->exists())
-		dir->mkdir(".");
-	delete dir;
-
-	dir = new QDir(QString::fromStdString(SystemParams::str_Resources_Binarization));
-	if (!dir->exists())
-		dir->mkdir(".");
-	delete dir;
-
-	dir = new QDir(QString::fromStdString(SystemParams::str_Resources_Original + outDir));
+	QDir *dir = new QDir(QString::fromStdString(SystemParams::str_Resources_Original + outDir));
 	if (!dir->exists())
 		dir->mkdir(".");
 	delete dir;

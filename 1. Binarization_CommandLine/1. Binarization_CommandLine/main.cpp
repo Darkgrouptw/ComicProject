@@ -141,6 +141,23 @@ int main(int argc, char *argv[])
 
 	
 	// 寫檔案名稱，給接下來的程序做
+	#pragma region 產生目錄
+	QDir *dir = new QDir(QString("../Output"));
+	if (!dir->exists())
+		dir->mkdir(".");
+	delete dir;
+
+	dir = new QDir(QString::fromStdString(SystemParams::str_Resources_Original));
+	if (!dir->exists())
+		dir->mkdir(".");
+	delete dir;
+
+	dir = new QDir(QString::fromStdString(SystemParams::str_Resources_Binarization));
+	if (!dir->exists())
+		dir->mkdir(".");
+	delete dir;
+	#pragma endregion
+
 	QFile file("../Output/FileLog.txt");
 	file.open(QIODevice::WriteOnly | QIODevice::Text);
 
