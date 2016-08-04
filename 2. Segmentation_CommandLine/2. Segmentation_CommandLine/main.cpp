@@ -40,14 +40,14 @@ void ParamsSet(int &i, char **argv)
 		cout << endl;
 		cout << "參考參數(擺在後面)：" << endl;
 		cout << "-msize <數字>			最小區塊的參數 (ex: 5000)" << endl;
-		cout << "";
 		cout << "-d				顯示 Debug 資訊" << endl;
+		cout << "-dir				輸出的資料夾" << endl;
 		cout << endl;
 		cout << "範例：" << endl;
-		cout << "	假設只執行單張圖片，可以打" << endl;
-		cout << "<exe檔> -i 1.png" << endl;
-		cout << "	假設要執行檔個目錄裡面的圖檔，可以打" << endl;
-		cout << "<exe檔> -t \"D:/123/\"" << endl;
+		cout << "‧假設只執行單張圖片，可以打" << endl;
+		cout << "<exe檔> -i 1.png" << endl << endl;
+		cout << "‧假設要執行檔個目錄裡面的圖檔，可以打" << endl;
+		cout << "<exe檔> -t \"D:/123/\"" << endl << endl;
 		exit(0);
 	}
 	else if (params == "-i")
@@ -57,7 +57,6 @@ void ParamsSet(int &i, char **argv)
 		{
 			DoInfo *tempDoList = new DoInfo;
 			tempDoList->fileName = tempStr;
-			tempDoList->outDir = "";
 			DoList.push_back(tempDoList);
 		}
 		else
@@ -95,7 +94,6 @@ void ParamsSet(int &i, char **argv)
 					tempLine = ss.readLine();
 					DoInfo *doTemp = new DoInfo;
 					doTemp->fileName = tempLine;
-					doTemp->outDir = outDirTemp;
 					DoList.push_back(doTemp);
 				}
 			}
@@ -113,7 +111,6 @@ void ParamsSet(int &i, char **argv)
 			{
 				DoInfo *tempDoList = new DoInfo;
 				tempDoList->fileName = dir.absolutePath() + "/" + temp1[j];
-				tempDoList->outDir = dir.absolutePath().split("/").last() + "/";
 				DoList.push_back(tempDoList);
 			}
 		}
@@ -122,6 +119,8 @@ void ParamsSet(int &i, char **argv)
 		SystemParams::s_min_size_area = QString::fromStdString(argv[++i]).toDouble();
 	else if (params == "-d")
 		bool_debug = true;
+	else if (params == "-dir")
+		outDirTemp = QString(argv[++i]);
 }
 
 int main(int argc, char *argv[])
@@ -138,7 +137,7 @@ int main(int argc, char *argv[])
 	for (int i = 0; i < DoList.size(); i++)
 	{
 		CartoonTexture_Segment_Library *tempSeg;
-		tempSeg = new CartoonTexture_Segment_Library(DoList[i]->fileName.toStdString(), DoList[i]->outDir.toStdString(), bool_debug);
+		tempSeg = new CartoonTexture_Segment_Library(DoList[i]->fileName.toStdString(), outDirTemp.toStdString(), bool_debug);
 		tempSeg->ComputeCTSegmentation();
 		delete tempSeg;
 

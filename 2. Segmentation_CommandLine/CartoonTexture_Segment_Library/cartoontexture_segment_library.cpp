@@ -12,31 +12,22 @@ CartoonTexture_Segment_Library::CartoonTexture_Segment_Library(string filename, 
 	if (bool_debug)
 		cout << "Width => " << img_ori_width << " Height => " << img_ori_height << endl;
 
-	QDir *dir = new QDir(QString::fromStdString(SystemParams::str_Resources_CFR));
-	if (!dir->exists())
-		dir->mkdir(".");
-	delete dir;
-
-	dir = new QDir(QString::fromStdString(SystemParams::str_Resources_CFC));
-	if (!dir->exists())
-		dir->mkdir(".");
-	delete dir;
-
 	if (outDir != "")
 	{
-		dir = new QDir(QString::fromStdString(SystemParams::str_Resources_Binarization + outDir));
+		QDir *
+			dir = new QDir(QString::fromStdString(SystemParams::str_Resources_Binarization + outDir));
 		if (!dir->exists())
-			dir->mkdir(".");
+			dir->mkpath(".");
 		delete dir;
 
 		dir = new QDir(QString::fromStdString(SystemParams::str_Resources_CFR + outDir));
 		if (!dir->exists())
-			dir->mkdir(".");
+			dir->mkpath(".");
 		delete dir;
 
 		dir = new QDir(QString::fromStdString(SystemParams::str_Resources_CFC + outDir));
 		if (!dir->exists())
-			dir->mkdir(".");
+			dir->mkpath(".");
 		delete dir;
 	}
 	this->outDir = outDir;
@@ -94,7 +85,7 @@ void CartoonTexture_Segment_Library::RemoveSmallArea2(cv::Mat& segm)
 }
 void CartoonTexture_Segment_Library::ComputeCTSegmentation()
 {
-	if (IsBinary())
+	if (!IsBinary())
 	{
 		cout << fileName << " 圖片沒有經過二值化!!" << endl;
 		return;
@@ -127,8 +118,12 @@ void CartoonTexture_Segment_Library::ComputeCTSegmentation()
 			cv::resize(ori_loacl_r, resizeMat, cv::Size(width, height), 0, 0, cv::INTER_NEAREST);
 			// Binarization
 			fileName = MakeFileNameWithFlag(ori_fileName, dpi, "_B");
-			if (!cv::imwrite(SystemParams::str_Resources_Binarization + outDir + fileName, resizeMat))
-				cout << "Write File Failed: " << SystemParams::str_Resources_Binarization << outDir << fileName << endl;
+
+			#pragma omp critical
+			{
+				if (!cv::imwrite(SystemParams::str_Resources_Binarization + outDir + fileName, resizeMat))
+					cout << "Write File Failed: " << SystemParams::str_Resources_Binarization << outDir << fileName << endl;
+			}
 		}
 		outSegm = CartoonTextureFilter::DoSegmentation(resizeMat);
 		RemoveSmallArea1(outSegm);
@@ -137,8 +132,12 @@ void CartoonTexture_Segment_Library::ComputeCTSegmentation()
 		// Cartoon Filter Region
 		fileName = MakeFileNameWithFlag(ori_fileName, dpi, "_CFR");
 
-		if (!cv::imwrite(SystemParams::str_Resources_CFR + outDir + fileName, outSegm))
-			cout << "Write File Failed: " << SystemParams::str_Resources_CFR << outDir << fileName << endl;
+
+		#pragma omp critical
+		{
+			if (!cv::imwrite(SystemParams::str_Resources_CFR + outDir + fileName, outSegm))
+				cout << "Write File Failed: " << SystemParams::str_Resources_CFR << outDir << fileName << endl;
+		}
 
 		drawing = cv::Mat::zeros(cv::Size(width, height), CV_8UC3);
 		// 網點區域上色
@@ -153,9 +152,11 @@ void CartoonTexture_Segment_Library::ComputeCTSegmentation()
 				}
 		fileName = MakeFileNameWithFlag(ori_fileName, dpi, "_CFC");//Cartoon Filter Color
 
-
-		if (!cv::imwrite(SystemParams::str_Resources_CFC + outDir + fileName, drawing))
-			cout << "Write File Failed: " << SystemParams::str_Resources_CFC << outDir << fileName << endl;
+		#pragma omp critical
+		{
+			if (!cv::imwrite(SystemParams::str_Resources_CFC + outDir + fileName, drawing))
+				cout << "Write File Failed: " << SystemParams::str_Resources_CFC << outDir << fileName << endl;
+		}
 
 		resizeMat.release();
 		outSegm.release();
@@ -170,8 +171,8 @@ bool CartoonTexture_Segment_Library::IsBinary()
 	for (int y = 0; y < img_ori_height; y++)
 		for (int x = 0; x < img_ori_width; x++)
 		{
-			cv::Vec3b temp = inpImg.at<cv::Vec3b>(x, y);
-			if (!((temp[0] == 0 && temp[1] == 0 && temp[2] == 0) || (temp[0] == 255 && temp[1] == 255 && temp[2] == 255)))
+			uchar temp = inpImg.at<uchar>(x, y);
+			if (!(temp == 0 || temp == 255))
 				return false;
 		}
 	return true;
