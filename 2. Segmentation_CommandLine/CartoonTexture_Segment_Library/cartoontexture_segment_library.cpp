@@ -119,11 +119,11 @@ void CartoonTexture_Segment_Library::ComputeCTSegmentation()
 			// Binarization
 			fileName = MakeFileNameWithFlag(ori_fileName, dpi, "_B");
 
-			#pragma omp critical
-			{
-				if (!cv::imwrite(SystemParams::str_Resources_Binarization + outDir + fileName, resizeMat))
-					cout << "Write File Failed: " << SystemParams::str_Resources_Binarization << outDir << fileName << endl;
-			}
+			//#pragma omp critical
+			//{
+			//	if (!cv::imwrite(SystemParams::str_Resources_Binarization + outDir + fileName, resizeMat))
+			//		cout << "Write File Failed: " << SystemParams::str_Resources_Binarization << outDir << fileName << endl;
+			//}
 		}
 		outSegm = CartoonTextureFilter::DoSegmentation(resizeMat);
 		RemoveSmallArea1(outSegm);
