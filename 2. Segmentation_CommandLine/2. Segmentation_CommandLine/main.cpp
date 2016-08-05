@@ -147,5 +147,19 @@ int main(int argc, char *argv[])
 		}
 	}
 	cout << "®É¶¡ => " << (float)timer.elapsed() / 1000 << " s" << endl;
+
+	QFile file("../Output/FileLog.txt");
+	file.open(QIODevice::WriteOnly | QIODevice::Text);
+
+	QTextStream ss(&file);
+	ss << "Total File Count: " << DoList.size() << endl;
+	ss << "Status: Complete Segment!!" << endl;
+	ss << "Out Dir: " << outDirTemp << endl;
+	ss << "Files:" << endl;
+	for (int i = 0; i < DoList.size(); i++)
+	{
+		DoList[i]->fileName = DoList[i]->fileName.replace("\\", "/");
+		ss << DoList[i]->fileName;
+	}
 	return 0;
 }

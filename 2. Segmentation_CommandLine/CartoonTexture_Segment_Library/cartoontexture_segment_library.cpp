@@ -24,11 +24,6 @@ CartoonTexture_Segment_Library::CartoonTexture_Segment_Library(string filename, 
 		if (!dir->exists())
 			dir->mkpath(".");
 		delete dir;
-
-		dir = new QDir(QString::fromStdString(SystemParams::str_Resources_CFC + outDir));
-		if (!dir->exists())
-			dir->mkpath(".");
-		delete dir;
 	}
 	this->outDir = outDir;
 }
@@ -114,17 +109,8 @@ void CartoonTexture_Segment_Library::ComputeCTSegmentation()
 
 		string fileName;
 		if (resizeTimes != 0)
-		{
 			cv::resize(ori_loacl_r, resizeMat, cv::Size(width, height), 0, 0, cv::INTER_NEAREST);
-			// Binarization
-			fileName = MakeFileNameWithFlag(ori_fileName, dpi, "_B");
 
-			//#pragma omp critical
-			//{
-			//	if (!cv::imwrite(SystemParams::str_Resources_Binarization + outDir + fileName, resizeMat))
-			//		cout << "Write File Failed: " << SystemParams::str_Resources_Binarization << outDir << fileName << endl;
-			//}
-		}
 		outSegm = CartoonTextureFilter::DoSegmentation(resizeMat);
 		RemoveSmallArea1(outSegm);
 		RemoveSmallArea2(outSegm);
@@ -132,36 +118,14 @@ void CartoonTexture_Segment_Library::ComputeCTSegmentation()
 		// Cartoon Filter Region
 		fileName = MakeFileNameWithFlag(ori_fileName, dpi, "_CFR");
 
-
 		#pragma omp critical
 		{
 			if (!cv::imwrite(SystemParams::str_Resources_CFR + outDir + fileName, outSegm))
 				cout << "Write File Failed: " << SystemParams::str_Resources_CFR << outDir << fileName << endl;
 		}
 
-		drawing = cv::Mat::zeros(cv::Size(width, height), CV_8UC3);
-		// 網點區域上色
-		for (int i = 0; i < outSegm.rows; i++)
-			for (int j = 0; j < outSegm.cols; j++)
-				if (resizeMat.at<uchar>(i, j) != 0)
-				{
-					drawing.at<cv::Vec3b>(i, j) = cv::Vec3b(255, 255, 255);
-					// 網點區域 Shader + 30
-					if (outSegm.at<uchar>(i, j) != 0)
-						drawing.at<cv::Vec3b>(i, j) = cv::Vec3b(71, 137, 244);
-				}
-		fileName = MakeFileNameWithFlag(ori_fileName, dpi, "_CFC");//Cartoon Filter Color
-
-		#pragma omp critical
-		{
-			if (!cv::imwrite(SystemParams::str_Resources_CFC + outDir + fileName, drawing))
-				cout << "Write File Failed: " << SystemParams::str_Resources_CFC << outDir << fileName << endl;
-		}
-
 		resizeMat.release();
 		outSegm.release();
-		drawing.release();
-
 	}
 	ori_loacl_r.release();
 }
@@ -177,7 +141,6 @@ bool CartoonTexture_Segment_Library::IsBinary()
 		}
 	return true;
 }
-
 string CartoonTexture_Segment_Library::MakeFileNameWithFlag(string fileName, int dpi, string flag)
 {
 	stringstream temp_dpi;
