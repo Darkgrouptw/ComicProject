@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
 	for (int i = 0; i < DoList.size(); i++)
 	{
 		DoList[i]->fileName = DoList[i]->fileName.replace("\\", "/");
-		ss << DoList[i]->fileName;
+		ss << DoList[i]->fileName << endl;
 	}
 	return 0;
 }
