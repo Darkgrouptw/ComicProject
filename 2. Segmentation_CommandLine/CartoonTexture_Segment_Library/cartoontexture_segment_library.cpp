@@ -25,7 +25,13 @@ CartoonTexture_Segment_Library::CartoonTexture_Segment_Library(string filename, 
 			dir->mkpath(".");
 		delete dir;
 	}
-	this->outDir = outDir;
+	QString temp = QString::fromStdString(outDir);
+	temp = temp.replace("\\", "/");
+
+	if (!temp.endsWith("/"))
+		this->outDir = temp.toStdString() + "/";
+	else
+		this->outDir = temp.toStdString();
 }
 CartoonTexture_Segment_Library::~CartoonTexture_Segment_Library()
 {

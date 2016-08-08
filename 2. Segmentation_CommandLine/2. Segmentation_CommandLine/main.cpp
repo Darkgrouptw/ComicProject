@@ -80,7 +80,7 @@ void ParamsSet(int &i, char **argv)
 				if (!tempLine.endsWith("Complete Binarization!!"))
 				{
 					cout << "FileLog 的 Status ，跟目前的步驟不合!!" << endl;
-					return;
+					exit(0);
 				}
 				
 				// OutDir
