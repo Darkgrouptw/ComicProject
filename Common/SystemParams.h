@@ -30,4 +30,9 @@ public:
 	static double ct_f_sigma;
 	static double ct_v_lim;
 	static double s_min_size_area;
+
+	// Local binary pattern
+	static int lbp_neighbors;
+	static int lbp_radius;
+
 };

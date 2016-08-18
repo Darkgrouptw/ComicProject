@@ -14,8 +14,7 @@ CartoonTexture_Segment_Library::CartoonTexture_Segment_Library(string filename, 
 
 	if (outDir != "")
 	{
-		QDir *
-			dir = new QDir(QString::fromStdString(SystemParams::str_Resources_Binarization + outDir));
+		QDir *dir = new QDir(QString::fromStdString(SystemParams::str_Resources_Binarization + outDir));
 		if (!dir->exists())
 			dir->mkpath(".");
 		delete dir;

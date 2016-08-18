@@ -24,3 +24,7 @@ int SystemParams::OG_Wsigma = 0;
 double SystemParams::ct_f_sigma = 5.5f;
 double SystemParams::ct_v_lim = 20;
 double SystemParams::s_min_size_area = 5000;
+
+// Local binary pattern
+int SystemParams::lbp_neighbors = 16;
+int SystemParams::lbp_radius = 4;
